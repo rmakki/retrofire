@@ -4,13 +4,12 @@ import model.FirebaseResponse;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofitApi.FirebaseSvcApi;
-import unsafe.UnsafeHttpsClient;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -307,7 +306,13 @@ public class FirebaseSvc {
 
     private FirebaseSvcApi firebaseSvcApi () {
 
-        OkHttpClient.Builder okHttpBuilder = UnsafeHttpsClient.getUnsafeOkHttpClient();
+        // for logging/testing purposes, do not use in production environment
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient.Builder okHttpBuilder = new OkHttpClient.Builder().addInterceptor(interceptor);
+
+        // No logging
+        // OkHttpClient.Builder okHttpBuilder = new OkHttpClient.Builder();
 
         FirebaseSvcApi api = new Retrofit.Builder()
                 .baseUrl(this.FIREBASE_REF)
@@ -322,11 +327,16 @@ public class FirebaseSvc {
 
     private FirebaseSvcApi firebaseSvcApiNoConverter () {
 
-        OkHttpClient.Builder okHttpBuilder = UnsafeHttpsClient.getUnsafeOkHttpClient();
+        // for logging/testing purposes, do not use in production environment
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient.Builder okHttpBuilder = new OkHttpClient.Builder().addInterceptor(interceptor);
+
+        // No logging
+        // OkHttpClient.Builder okHttpBuilder = new OkHttpClient.Builder();
 
         FirebaseSvcApi api = new Retrofit.Builder()
                 .baseUrl(this.FIREBASE_REF)
-                //.addConverterFactory(GsonConverterFactory.create())
                 .client(okHttpBuilder.build())
                 .build()
                 .create(FirebaseSvcApi.class);
