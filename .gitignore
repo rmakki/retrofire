@@ -1,0 +1,36 @@
+#Gradle
+.gradle/
+build/
+
+# Eclipse
+.classpath
+.project
+.settings/
+bin/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+classes
+
+# Eclipse
+.classpath
+.project
+.settings
+eclipsebin
+
+#MacOS
+.DS_Store
+
+bin
+gen
+build
+out
+lib
+
+
+
+
+
