@@ -58,12 +58,10 @@ public class Testsuite1 {
 
         catch (IOException e) { // Network error like connecting to fb with http instead of https
             // or wrong instance name (causes timeout)
-            // throw new UserDAOException(ErrorCodes.NETWORK.name(), e);
             System.out.println("Network error " + e );
 
         }
         catch (Exception e) { // Unexpected/parse error example you pass a null to the Retrofit Path parameter
-            // throw new UserDAOException(ErrorCodes.UNEXPECTED.name(), e);
             System.out.println("Unexpected/parse error " + e );
 
         }
@@ -92,21 +90,19 @@ public class Testsuite1 {
 
             // This will update userF data using a Map
             // This will update a node under users/<firebasekey>/userpatch & users/<firebasekey>/patchpassword
-            firebaseResponse = fbSvc.patch("users", dataMap);
+            // firebaseResponse = fbSvc.patch("users", dataMap);
 
             // This will update userF data by sending rawjson
-            // firebaseResponse = fbSvc.patch("users/-KvcV06UQENpcyPdzCKm", rawjson);
+             firebaseResponse = fbSvc.patch("users/-KvcV06UQENpcyPdzCKm", rawjson);
 
         }
 
         catch (IOException e) { // Network error like connecting to fb with http instead of https
             // or wrong instance name (causes timeout)
-            // throw new UserDAOException(ErrorCodes.NETWORK.name(), e);
             System.out.println("Network error " + e );
 
         }
         catch (Exception e) { // Unexpected/parse error example you pass a null to the Retrofit Path parameter
-            // throw new UserDAOException(ErrorCodes.UNEXPECTED.name(), e);
             System.out.println("Unexpected/parse error " + e );
 
         }

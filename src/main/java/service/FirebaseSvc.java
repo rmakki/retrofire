@@ -275,30 +275,29 @@ public class FirebaseSvc {
 
     private FirebaseResponse processResponse (Response<ResponseBody> response) {
 
-        FirebaseResponse firebaseResponse = null;
+        FirebaseResponse firebaseResponse;
 
         String strRawResponse = fromInputDataToString(response);
 
         if (!response.isSuccessful()) {
             // Error from firebase with possible codes 403, 404, 417
             // for more details https://www.firebase.com/docs/rest/api/#section-error-conditions
-            // Throwable parameter to encapsulate the Response in case a calling method needs to decode/print the exact cause
             System.out.println("error " + strRawResponse);
             firebaseResponse = new FirebaseResponse(response.code(), false, strRawResponse);
 
-            //throw new UserDAOException(ErrorCodes.FIREBASE.name() + " " + fromInputDataToString(response));
         } else {
-            // firebase returned 200 but no update. It may happen if user was empty
+            // firebase returned 200 success but null body: no change happened in firebase
+            // It may happen for example if you send null data to be updated
             if (fromInputDataToString(response).equals("null")) {
-                // throw new UserDAOException(ErrorCodes.FAILED_ADD_FB_USER.name());
+
                 System.out.println("can't update null " + strRawResponse);
                 firebaseResponse = new FirebaseResponse(response.code(), false, strRawResponse);
 
             }
+            else { // success
+                firebaseResponse = new FirebaseResponse(response.code(), true, strRawResponse);
+            }
         }
-
-        // Success
-        firebaseResponse = new FirebaseResponse(response.code(), true, strRawResponse);
 
         return firebaseResponse;
     }

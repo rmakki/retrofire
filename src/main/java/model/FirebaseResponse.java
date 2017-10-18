@@ -5,8 +5,8 @@ package model;
  */
 public class FirebaseResponse {
 
-    private boolean success;
     private final int code;
+    private boolean success;
     private final String rawBody;
 
     public FirebaseResponse(int code, boolean success, String rawBody ) {
@@ -15,12 +15,12 @@ public class FirebaseResponse {
         this.rawBody = rawBody;
     }
 
-    public boolean isSuccess() {
-        return success;
-    }
-
     public int getCode() {
         return code;
+    }
+
+    public boolean isSuccess() {
+        return success;
     }
 
     public String getRawBody() {
