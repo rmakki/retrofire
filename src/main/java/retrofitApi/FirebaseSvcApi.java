@@ -13,33 +13,21 @@ import retrofit2.http.*;
  */
 public interface FirebaseSvcApi {
 
-	// Path to update User node in firebase. Only Sent fields will be updated
-	//String FB_PATCH_SVC_PATH = "/users";
-	String FB_PATCH_SVC_PATH = ".json";
-
-	// Path to update User node in firebase
-	//String USER_POST_SVC_PATH_DB = "/users.json";
-
 	// Required extension by firebase
-	String FB_POST_SVC_PATH = ".json";
+	String FB_REST_SVC_PATH = ".json";
 
-	//@POST(USER_POST_SVC_PATH_DB)
-	//Call<ResponseBody> post(@Body HashMap<String, Object> data);
-
-	//@PATCH("/" + "{path}" + FB_PATCH_SVC_PATH)
-	//Call<ResponseBody> patch(@Path("path") String path, @Body Object data);
-
-	@PATCH("/" + "{path}" + FB_PATCH_SVC_PATH)
+	@PATCH("/" + "{path}" + FB_REST_SVC_PATH)
 	Call<ResponseBody> patch(@Path("path") String path, @Body Object data);
 
-	@PATCH("/" + "{path}" + FB_PATCH_SVC_PATH)
+	// For patching raw json
+	@PATCH("/" + "{path}" + FB_REST_SVC_PATH)
 	Call<ResponseBody> patch(@Path("path") String path, @Body RequestBody body);
 
-	@POST("/" + "{path}" + FB_POST_SVC_PATH)
+	@POST("/" + "{path}" + FB_REST_SVC_PATH)
 	Call<ResponseBody> post(@Path("path") String path, @Body Object data);
 
 	// For posting raw json
-	@POST("/" + "{path}" + FB_POST_SVC_PATH)
+	@POST("/" + "{path}" + FB_REST_SVC_PATH)
 	Call<ResponseBody> post(@Path("path") String path, @Body RequestBody body);
 
 }
