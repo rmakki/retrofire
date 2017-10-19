@@ -71,6 +71,7 @@ public class Testsuite1 {
     }
 
 */
+    /*
     @Test
     public void TestPATCH(){
 
@@ -86,7 +87,7 @@ public class Testsuite1 {
 
             // This will update userF data
             // format: users/<firebasekey>/userpatch & users/<firebasekey>/password
-            // firebaseResponse = fbSvc.patch("users", userF);
+            // firebaseResponse = fbSvc.patch("users/-KvcV06UQENpcyPdzCKm", userF);
 
             // This will update userF data using a Map
             // This will update a node under users/<firebasekey>/userpatch & users/<firebasekey>/patchpassword
@@ -110,6 +111,47 @@ public class Testsuite1 {
         assertTrue(firebaseResponse.isSuccess());
         System.out.println("End of TestPATCH");
     }
+*/
+    @Test
+    public void TestPUT(){
+
+        String rawjson = "{\"userName\":\"userput\",\"password\":\"rawjsonputpassword\"}";
+
+        UserF userF = new UserF("userput","mapputpassword");
+        LinkedHashMap<String, Object> dataMap = new LinkedHashMap<String, Object>();
+        FirebaseResponse firebaseResponse = null;
+        dataMap.put("-KvcV06UQENpcyPdzCKm",userF);
+
+        try {
+
+            // This will update userF data
+            // format: users/<firebasekey>/userpatch & users/<firebasekey>/password
+            // firebaseResponse = fbSvc.patch("users/-KvcV06UQENpcyPdzCKm", userF);
+
+            // This will update userF data using a Map
+            // This will update a node under users/<firebasekey>/userpatch & users/<firebasekey>/patchpassword
+             //firebaseResponse = fbSvc.put("users", dataMap);
+
+            // This will update userF data by sending rawjson
+            firebaseResponse = fbSvc.put("users/-KvcV06UQENpcyPdzCKm", rawjson);
+
+        }
+
+        catch (IOException e) { // Network error like connecting to fb with http instead of https
+            // or wrong instance name (causes timeout)
+            System.out.println("Network error " + e );
+
+        }
+        catch (Exception e) { // Unexpected/parse error example you pass a null to the Retrofit Path parameter
+            System.out.println("Unexpected/parse error " + e );
+
+        }
+
+        assertTrue(firebaseResponse.isSuccess());
+        System.out.println("End of TestPUT");
+    }
+
+
 
     @AfterClass
     public static void TestAfter() {

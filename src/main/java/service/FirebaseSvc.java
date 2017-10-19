@@ -125,7 +125,6 @@ public class FirebaseSvc {
      *              with Info "No data supplied."
      *
      * @return {@link FirebaseResponse}
-
      *
      */
 
@@ -148,6 +147,7 @@ public class FirebaseSvc {
         return firebaseResponse;
 
     }
+
 
 
     /**
@@ -256,6 +256,120 @@ public class FirebaseSvc {
         firebaseResponse = processResponse(response);
 
         return firebaseResponse;
+
+    }
+
+
+    /**
+     *
+     * PUT data on the path relative to the baseURL : create or delete
+     *
+     * If there is existing data at the path, the data you pass will overwrite it
+     * If you pass empty data, any data existing at the path will be deleted
+     * If the fields passed do not exist, they will be added to firebase
+     *
+     * @param path  if empty/null, data will be overwritten/created under the root of the baseURL
+     *              Be careful with this as this can clear all the data under your root and
+     *              replace it with the object you are passing
+     *              if not null, data will be overwritten/created relative to the baseURL
+     *
+     * @param data  if null object Firebase will return a success
+     *              but the call will not change the state of your firebase instance
+     *              if empty object, data of the fields sent will be cleared relative to the baseURL
+     *
+     *
+     * @return {@link FirebaseResponse}
+     *
+     */
+
+    public FirebaseResponse put(String path, Object data ) throws Exception {
+
+        if (path == null) {
+            path = "";
+        }
+
+        FirebaseResponse firebaseResponse;
+
+        Call<ResponseBody> call = this.firebaseSvcApi.put(path, data);
+
+        Response<ResponseBody> response = call.execute();
+
+        firebaseResponse = processResponse(response);
+
+        return firebaseResponse;
+
+    }
+
+
+    /**
+     *
+     * PUT raw json data on the path relative to the baseURL : create or delete
+     *
+     * If there is existing data at the path, the data you pass will overwrite it
+     * If you pass empty data, any data existing at the path will be deleted
+     * If the fields passed do not exist, they will be added to firebase
+     *
+     * @param path  if empty/null, data will be overwritten/created under the root of the baseURL
+     *              Be careful with this as this can clear all the data under your root and
+     *              replace it with the object you are passing
+     *              if not null, data will be overwritten/created relative to the baseURL
+     *
+     * @param rawdata
+     *              if null Retrofit will throw a IllegalArgumentException: Body parameter value must not be null
+     *              exception.
+     *              if you pass an empty String okhttp3 will throw a java.lang.NullPointerException
+     *              with Info "No data supplied."
+     *
+     * @return {@link FirebaseResponse}
+     *
+     */
+
+    public FirebaseResponse put(String path, String rawdata) throws Exception {
+
+        if (path == null) {
+            path = "";
+        }
+
+        FirebaseResponse firebaseResponse;
+
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),rawdata);
+
+        Call<ResponseBody> call = this.firebaseSvcApiNoConverter.put(path, body);
+
+        Response<ResponseBody> response = call.execute();
+
+        firebaseResponse = processResponse(response);
+
+        return firebaseResponse;
+
+    }
+
+    /**
+     *
+     * PUT data on the path relative to the baseURL : create or delete
+     *
+     * If there is existing data at the path, the data you pass will overwrite it
+     * If you pass empty data, any data existing at the path will be deleted
+     * If the fields passed do not exist, they will be added to firebase
+     *
+     * @param path  if empty/null, data will be overwritten/created under the root of the baseURL
+     *              Be careful with this as this can clear all the data under your root and
+     *              replace it with the object you are passing
+     *              if not null, data will be overwritten/created relative to the baseURL
+     *
+     * @param data  if null object Firebase will return a success
+     *              but the call will not change the state of your firebase instance
+     *              if empty object, data of the fields sent will be cleared relative to the baseURL
+     *
+     *
+     * @return {@link FirebaseResponse}
+     *
+     */
+
+
+    public FirebaseResponse put(String path, Map <String, Object> data) throws Exception {
+
+        return this.put(path,(Object)data);
 
     }
 

@@ -19,16 +19,24 @@ public interface FirebaseSvcApi {
 	@PATCH("/" + "{path}" + FB_REST_SVC_PATH)
 	Call<ResponseBody> patch(@Path("path") String path, @Body Object data);
 
-	// For patching raw json
+	// For raw json
 	@PATCH("/" + "{path}" + FB_REST_SVC_PATH)
 	Call<ResponseBody> patch(@Path("path") String path, @Body RequestBody body);
 
 	@POST("/" + "{path}" + FB_REST_SVC_PATH)
 	Call<ResponseBody> post(@Path("path") String path, @Body Object data);
 
-	// For posting raw json
+	// For raw json
 	@POST("/" + "{path}" + FB_REST_SVC_PATH)
 	Call<ResponseBody> post(@Path("path") String path, @Body RequestBody body);
+
+	@PUT("/" + "{path}" + FB_REST_SVC_PATH)
+	Call<ResponseBody> put(@Path("path") String path, @Body Object data);
+
+	// For raw json
+	@PUT("/" + "{path}" + FB_REST_SVC_PATH)
+	Call<ResponseBody> put(@Path("path") String path, @Body RequestBody body);
+
 
 }
 
