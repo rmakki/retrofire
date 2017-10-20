@@ -37,6 +37,9 @@ public interface FirebaseSvcApi {
 	@PUT("/" + "{path}" + FB_REST_SVC_PATH)
 	Call<ResponseBody> put(@Path("path") String path, @Body RequestBody body);
 
+	@DELETE("/" + "{path}" + FB_REST_SVC_PATH)
+	Call<ResponseBody> delete(@Path("path") String path);
+
 
 }
 

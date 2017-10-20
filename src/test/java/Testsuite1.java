@@ -112,7 +112,7 @@ public class Testsuite1 {
         System.out.println("End of TestPATCH");
     }
 */
-    @Test
+ /*   @Test
     public void TestPUT(){
 
         String rawjson = "{\"userName\":\"userput\",\"password\":\"rawjsonputpassword\"}";
@@ -150,7 +150,31 @@ public class Testsuite1 {
         assertTrue(firebaseResponse.isSuccess());
         System.out.println("End of TestPUT");
     }
+*/
+    @Test
+    public void TestDELETE(){
 
+        FirebaseResponse firebaseResponse = null;
+
+        try {
+            // deletes the key and everything under it
+            firebaseResponse = fbSvc.delete("users/-KvcV06UQENpcyPdzCKm");
+
+        }
+
+        catch (IOException e) { // Network error like connecting to fb with http instead of https
+            // or wrong instance name (causes timeout)
+            System.out.println("Network error " + e );
+
+        }
+        catch (Exception e) { // Unexpected/parse error example you pass a null to the Retrofit Path parameter
+            System.out.println("Unexpected/parse error " + e );
+
+        }
+
+        assertTrue(firebaseResponse.isSuccess());
+        System.out.println("End of TestPUT");
+    }
 
 
     @AfterClass
