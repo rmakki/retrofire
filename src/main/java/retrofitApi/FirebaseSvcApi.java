@@ -16,7 +16,10 @@ public interface FirebaseSvcApi {
 	// Required extension by firebase
 	String FB_REST_SVC_PATH = ".json";
 
-	@PATCH("/" + "{path}" + FB_REST_SVC_PATH)
+    @GET("/" + "{path}" + FB_REST_SVC_PATH)
+    Call<ResponseBody> get(@Path("path") String path);
+
+    @PATCH("/" + "{path}" + FB_REST_SVC_PATH)
 	Call<ResponseBody> patch(@Path("path") String path, @Body Object data);
 
 	// For raw json

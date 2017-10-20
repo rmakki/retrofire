@@ -379,7 +379,7 @@ public class FirebaseSvc {
      *
      *
      * @param path  if empty/null, data will be deleted under the root of the baseURL
-     *              Be careful with this as this can clear all the data under your root and
+     *              Be careful with this as this can clear all the data under your root
      *
      * @return {@link FirebaseResponse}
      *
@@ -394,6 +394,35 @@ public class FirebaseSvc {
         FirebaseResponse firebaseResponse;
 
         Call<ResponseBody> call = this.firebaseSvcApi.delete(path);
+
+        Response<ResponseBody> response = call.execute();
+
+        firebaseResponse = processResponse(response);
+
+        return firebaseResponse;
+
+    }
+
+    /**
+     *
+     * GET data from the path relative to the baseURL
+     *
+     *
+     * @param path  if empty/null, all data under your root will be fetched
+     *
+     * @return {@link FirebaseResponse}
+     *
+     */
+
+    public FirebaseResponse get(String path) throws Exception {
+
+        if (path == null) {
+            path = "";
+        }
+
+        FirebaseResponse firebaseResponse;
+
+        Call<ResponseBody> call = this.firebaseSvcApi.get(path);
 
         Response<ResponseBody> response = call.execute();
 
