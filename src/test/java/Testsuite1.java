@@ -16,14 +16,17 @@ import static org.junit.Assert.assertTrue;
 
 public class Testsuite1 {
     String FIREBASE_REF = "https://smartplayTest.firebaseio.com/";
+    //FirebaseSvc fbSvc = new FirebaseSvc(FIREBASE_REF);
+    //FirebaseSvc fbSvc = new FirebaseSvc(FIREBASE_REF,"abcdefg");
     FirebaseSvc fbSvc = new FirebaseSvc(FIREBASE_REF);
+
 
 
     @BeforeClass
     public static void TestBefore() {
         System.out.println("testbefore");
     }
-/*
+
     @Test
     public void TestPOST(){
 
@@ -48,10 +51,11 @@ public class Testsuite1 {
 
             //This will add userF data under the users/ node your firebase instance
             // format: users/<firebasekey>/user1 & users/<firebasekey>/password
-            //firebaseResponse = fbSvc.post("users", userF);
+            firebaseResponse = fbSvc.post("users", userF);
 
             //This will add rawjson
-            firebaseResponse = fbSvc.post("", rawjson);
+            //firebaseResponse = fbSvc.post("users", rawjson);
+
 
 
         }
@@ -64,13 +68,30 @@ public class Testsuite1 {
         catch (Exception e) { // Unexpected/parse error example you pass a null to the Retrofit Path parameter
             System.out.println("Unexpected/parse error " + e );
 
+
+        }
+
+        try {
+            firebaseResponse = fbSvc.post("users", rawjson);
+
+
+        }
+        catch (IOException e) { // Network error like connecting to fb with http instead of https
+            // or wrong instance name (causes timeout)
+            System.out.println("Network error " + e );
+
+        }
+        catch (Exception e) { // Unexpected/parse error example you pass a null to the Retrofit Path parameter
+            System.out.println("Unexpected/parse error " + e );
+
+
         }
 
         assertTrue(firebaseResponse.isSuccess());
         System.out.println("End of TestPOST");
     }
 
-*/
+
     /*
     @Test
     public void TestPATCH(){
@@ -112,7 +133,9 @@ public class Testsuite1 {
         System.out.println("End of TestPATCH");
     }
 */
- /*   @Test
+
+    /*
+    @Test
     public void TestPUT(){
 
         String rawjson = "{\"userName\":\"userput\",\"password\":\"rawjsonputpassword\"}";
@@ -126,7 +149,7 @@ public class Testsuite1 {
 
             // This will update userF data
             // format: users/<firebasekey>/userpatch & users/<firebasekey>/password
-            // firebaseResponse = fbSvc.patch("users/-KvcV06UQENpcyPdzCKm", userF);
+            // firebaseResponse = fbSvc.put("users/-KvcV06UQENpcyPdzCKm", userF);
 
             // This will update userF data using a Map
             // This will update a node under users/<firebasekey>/userpatch & users/<firebasekey>/patchpassword
@@ -176,7 +199,7 @@ public class Testsuite1 {
         System.out.println("End of TestDELETE");
     }
 */
-
+/*
     @Test
     public void TestGET(){
 
@@ -202,7 +225,7 @@ public class Testsuite1 {
         System.out.println("End of TestGET");
     }
 
-
+*/
     @AfterClass
     public static void TestAfter() {
         System.out.println("testafter");

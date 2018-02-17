@@ -1,9 +1,7 @@
 package service;
 
 import model.FirebaseResponse;
-import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
+import okhttp3.*;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -21,50 +19,78 @@ import java.util.Map;
 public class FirebaseSvc {
 
     private String FIREBASE_REF;
+    private String oAuth2Token=null;
+    private String firebaseIDToken=null;
     private FirebaseSvcApi firebaseSvcApi;
     private FirebaseSvcApi firebaseSvcApiNoConverter;
-
-
+    private OkHttpClient.Builder okHttpBuilder;
 
     /**
-     *
      * Constructor
-     * @param FIREBASE_REF firebase baseURL
      *
+     * @param FIREBASE_REF firebase baseURL
      */
 
     public FirebaseSvc(String FIREBASE_REF) {
 
-            this.FIREBASE_REF = FIREBASE_REF;
+        this.FIREBASE_REF = FIREBASE_REF;
 
-            // Initialise reusable okhttp and Retrofit instance with json converter
-            this.firebaseSvcApi = firebaseSvcApi();
+        this.setOkHttpBuilder();
 
-            // Initialise reusable okhttp and Retrofit instance without json converter
-            this.firebaseSvcApiNoConverter = firebaseSvcApiNoConverter();
+        // Initialise reusable okhttp and Retrofit instance with json converter
+        this.firebaseSvcApi = firebaseSvcApi();
+
+        // Initialise reusable okhttp and Retrofit instance without json converter
+        this.firebaseSvcApiNoConverter = firebaseSvcApiNoConverter();
     }
 
 
     /**
+     * Constructor
      *
+     * @param FIREBASE_REF    firebase baseURL
+     * @param firebaseIDToken To send authenticated requests to firebase REST API using
+     *                        firebase ID tokens.
+     *                        For more details:
+     *                        https://firebase.google.com/docs/database/rest/auth#authenticate_with_an_id_token
+     */
+
+    public FirebaseSvc(String FIREBASE_REF, String firebaseIDToken) {
+
+        this.FIREBASE_REF = FIREBASE_REF;
+
+        this.firebaseIDToken = firebaseIDToken;
+
+        this.setOkHttpBuilder();
+
+        // Initialise reusable okhttp and Retrofit instance with json converter
+        this.firebaseSvcApi = firebaseSvcApi();
+
+        // Initialise reusable okhttp and Retrofit instance without json converter
+        this.firebaseSvcApiNoConverter = firebaseSvcApiNoConverter();
+
+        // Add intereceptor to include the firebase ID Token as a query String parameter
+        // auth=<ID_TOKEN> in all requests
+
+
+    }
+
+    /**
      * PATCH data on the path relative to the baseURL
-     *
+     * <p>
      * Firebase will only update the fields passed.
      * If the fields passed do not exist, they will be added to firebase
      *
-     * @param path  if empty/null, data will be updated under the root of the baseURL
-     *              if not null, data will be updated relative to the baseURL
-     *
-     * @param data  -if null Retrofit will throw a "Body parameter value must not be null"
-     *              error
-     *              if you pass an empty object Firebase will return a success
-     *              but the call will not change the state of your firebase instance
-     *
+     * @param path if empty/null, data will be updated under the root of the baseURL
+     *             if not null, data will be updated relative to the baseURL
+     * @param data -if null Retrofit will throw a "Body parameter value must not be null"
+     *             error
+     *             if you pass an empty object Firebase will return a success
+     *             but the call will not change the state of your firebase instance
      * @return {@link FirebaseResponse}
-     *
      */
 
-    public FirebaseResponse patch(String path, Object data ) throws Exception {
+    public FirebaseResponse patch(String path, Object data) throws Exception {
 
         if (path == null) {
             path = "";
@@ -83,49 +109,40 @@ public class FirebaseSvc {
     }
 
     /**
-     *
      * PATCH data on the path relative to the baseURL
-     *
+     * <p>
      * Firebase will only update the fields passed.
      * If the fields passed do not exist, they will be added to firebase
      *
-     * @param path  if empty/null, data will be updated under the root of the baseURL
-     *              if not null, data will be updated relative to the baseURL
-     *
-     * @param data  -if null Retrofit will throw a "Body parameter value must not be null"
-     *              error
-     *              if you pass an empty object Firebase will return a success
-     *              but the call will not change the state of your firebase instance
-     *
+     * @param path if empty/null, data will be updated under the root of the baseURL
+     *             if not null, data will be updated relative to the baseURL
+     * @param data -if null Retrofit will throw a "Body parameter value must not be null"
+     *             error
+     *             if you pass an empty object Firebase will return a success
+     *             but the call will not change the state of your firebase instance
      * @return {@link FirebaseResponse}
-     *
      */
 
-    public FirebaseResponse patch(String path, Map <String, Object> data ) throws Exception {
+    public FirebaseResponse patch(String path, Map<String, Object> data) throws Exception {
 
-        return this.patch(path,(Object)data);
+        return this.patch(path, (Object) data);
 
     }
 
 
     /**
-     *
      * PATCH RAW json data relative to the baseURL
-     *
+     * <p>
      * Firebase will only update the fields passed.
      * If the fields passed do not exist, they will be added to firebase
      *
-     * @param path  if empty/null, data will be updated under the root of the baseURL
-     *              if not null, data will be updated relative to the baseURL
-     *
-     * @param rawdata
-     *              if null Retrofit will throw a IllegalArgumentException: Body parameter value must not be null
-     *              exception.
-     *              if you pass an empty String okhttp3 will throw a java.lang.NullPointerException
-     *              with Info "No data supplied."
-     *
+     * @param path    if empty/null, data will be updated under the root of the baseURL
+     *                if not null, data will be updated relative to the baseURL
+     * @param rawdata if null Retrofit will throw a IllegalArgumentException: Body parameter value must not be null
+     *                exception.
+     *                if you pass an empty String okhttp3 will throw a java.lang.NullPointerException
+     *                with Info "No data supplied."
      * @return {@link FirebaseResponse}
-     *
      */
 
     public FirebaseResponse patch(String path, String rawdata) throws Exception {
@@ -136,7 +153,7 @@ public class FirebaseSvc {
 
         FirebaseResponse firebaseResponse;
 
-        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),rawdata);
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), rawdata);
 
         Call<ResponseBody> call = this.firebaseSvcApiNoConverter.patch(path, body);
 
@@ -149,28 +166,25 @@ public class FirebaseSvc {
     }
 
 
-
     /**
-     *
      * POST data relative to the baseURL
-     *
+     * <p>
      * Firebase will insert data under the baseURL but associated with a new Firebase
      * generated key
-     * @param path  if empty/null, data will be posted under the root
-     *              if not null, data will be inserted relative to the baseURL
      *
-     * @param data  -if null Retrofit will throw a "Body parameter value must not be null"
-     *              error
-     *              if you pass an empty object beware:
-     *              Firebase will not create an empty node with a generated key
-     *              if that is your expectation. Firebase will return a success
-     *              but the call will not change the state of your firebase instance
-     *              (as if you did not make a call, no data posted)
+     * @param path if empty/null, data will be posted under the root
+     *             if not null, data will be inserted relative to the baseURL
+     * @param data -if null Retrofit will throw a "Body parameter value must not be null"
+     *             error
+     *             if you pass an empty object beware:
+     *             Firebase will not create an empty node with a generated key
+     *             if that is your expectation. Firebase will return a success
+     *             but the call will not change the state of your firebase instance
+     *             (as if you did not make a call, no data posted)
      * @return {@link FirebaseResponse}
-     *
      */
 
-    public FirebaseResponse post(String path, Object data ) throws Exception {
+    public FirebaseResponse post(String path, Object data) throws Exception {
 
         if (path == null) {
             path = "";
@@ -191,53 +205,48 @@ public class FirebaseSvc {
 
     /**
      * POST data relative to the baseURL
-     *
+     * <p>
      * Firebase will insert data under the baseURL but associated with a new Firebase
      * generated key
-     * @param path  if empty/null, data will be posted under the root
-     *              if not null, data will be inserted relative to the baseURL
      *
-     * @param data  if null Retrofit will throw a IllegalArgumentException: Body parameter value must not be null
-     *              exception.
-     *              if you pass an empty object beware:
-     *              Firebase will not create an empty node with a generated key
-     *              if that is your expectation. Firebase will return a success
-     *              but the call will not change the state of your firebase instance
-     *              (as if you did not make a call, no data posted)
+     * @param path if empty/null, data will be posted under the root
+     *             if not null, data will be inserted relative to the baseURL
+     * @param data if null Retrofit will throw a IllegalArgumentException: Body parameter value must not be null
+     *             exception.
+     *             if you pass an empty object beware:
+     *             Firebase will not create an empty node with a generated key
+     *             if that is your expectation. Firebase will return a success
+     *             but the call will not change the state of your firebase instance
+     *             (as if you did not make a call, no data posted)
      * @return {@link FirebaseResponse}
-     *
-     *
+     * <p>
+     * <p>
      * Note: Each element in the Map will be inserted under a new firebase generated key. The map
      * key will translate to a parent node and the fields in the object will translate to individual elements
      * under the parent node
-     *
      */
 
-    public FirebaseResponse post(String path, Map <String, Object> data) throws Exception {
+    public FirebaseResponse post(String path, Map<String, Object> data) throws Exception {
 
-        return this.post(path,(Object)data);
+        return this.post(path, (Object) data);
 
     }
 
 
     /**
-     *
      * POST RAW json data relative to the baseURL
-     *
+     * <p>
      * Firebase will insert data under the baseURL but associated with a new Firebase
      * generated key
-     * @param path  if empty/null, data will be posted under the root
-     *              if not null, data will be inserted relative to the baseURL
      *
-     * @param rawdata
-     *              if null Retrofit will throw a IllegalArgumentException: Body parameter value must not be null
-     *              exception.
-     *              if you pass an empty String okhttp3 will throw a java.lang.NullPointerException
-     *              with Info "No data supplied."
+     * @param path    if empty/null, data will be posted under the root
+     *                if not null, data will be inserted relative to the baseURL
+     * @param rawdata if null Retrofit will throw a IllegalArgumentException: Body parameter value must not be null
+     *                exception.
+     *                if you pass an empty String okhttp3 will throw a java.lang.NullPointerException
+     *                with Info "No data supplied."
      * @return {@link FirebaseResponse}
-
-    *
-    */
+     */
 
     public FirebaseResponse post(String path, String rawdata) throws Exception {
 
@@ -247,7 +256,7 @@ public class FirebaseSvc {
 
         FirebaseResponse firebaseResponse;
 
-        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),rawdata);
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), rawdata);
 
         Call<ResponseBody> call = this.firebaseSvcApiNoConverter.post(path, body);
 
@@ -261,28 +270,23 @@ public class FirebaseSvc {
 
 
     /**
-     *
      * PUT data on the path relative to the baseURL : create or delete
-     *
+     * <p>
      * If there is existing data at the path, the data you pass will overwrite it
      * If you pass empty data, any data existing at the path will be deleted
      * If the fields passed do not exist, they will be added to firebase
      *
-     * @param path  if empty/null, data will be overwritten/created under the root of the baseURL
-     *              Be careful with this as this can clear all the data under your root and
-     *              replace it with the object you are passing
-     *              if not null, data will be overwritten/created relative to the baseURL
-     *
-     * @param data  if null object Firebase will return a success
-     *              but the call will not change the state of your firebase instance
-     *              if empty object, data of the fields sent will be cleared relative to the baseURL
-     *
-     *
+     * @param path if empty/null, data will be overwritten/created under the root of the baseURL
+     *             Be careful with this as this can clear all the data under your root and
+     *             replace it with the object you are passing
+     *             if not null, data will be overwritten/created relative to the baseURL
+     * @param data if null object Firebase will return a success
+     *             but the call will not change the state of your firebase instance
+     *             if empty object, data of the fields sent will be cleared relative to the baseURL
      * @return {@link FirebaseResponse}
-     *
      */
 
-    public FirebaseResponse put(String path, Object data ) throws Exception {
+    public FirebaseResponse put(String path, Object data) throws Exception {
 
         if (path == null) {
             path = "";
@@ -301,55 +305,45 @@ public class FirebaseSvc {
     }
 
     /**
-     *
      * PUT data on the path relative to the baseURL : create or delete
-     *
+     * <p>
      * If there is existing data at the path, the data you pass will overwrite it
      * If you pass empty data, any data existing at the path will be deleted
      * If the fields passed do not exist, they will be added to firebase
      *
-     * @param path  if empty/null, data will be overwritten/created under the root of the baseURL
-     *              Be careful with this as this can clear all the data under your root and
-     *              replace it with the object you are passing
-     *              if not null, data will be overwritten/created relative to the baseURL
-     *
-     * @param data  if null object Firebase will return a success
-     *              but the call will not change the state of your firebase instance
-     *              if empty object, data of the fields sent will be cleared relative to the baseURL
-     *
-     *
+     * @param path if empty/null, data will be overwritten/created under the root of the baseURL
+     *             Be careful with this as this can clear all the data under your root and
+     *             replace it with the object you are passing
+     *             if not null, data will be overwritten/created relative to the baseURL
+     * @param data if null object Firebase will return a success
+     *             but the call will not change the state of your firebase instance
+     *             if empty object, data of the fields sent will be cleared relative to the baseURL
      * @return {@link FirebaseResponse}
-     *
      */
 
 
-    public FirebaseResponse put(String path, Map <String, Object> data) throws Exception {
+    public FirebaseResponse put(String path, Map<String, Object> data) throws Exception {
 
-        return this.put(path,(Object)data);
+        return this.put(path, (Object) data);
 
     }
 
     /**
-     *
      * PUT raw json data on the path relative to the baseURL : create or delete
-     *
+     * <p>
      * If there is existing data at the path, the data you pass will overwrite it
      * If you pass empty data, any data existing at the path will be deleted
      * If the fields passed do not exist, they will be added to firebase
      *
-     * @param path  if empty/null, data will be overwritten/created under the root of the baseURL
-     *              Be careful with this as this can clear all the data under your root and
-     *              replace it with the object you are passing
-     *              if not null, data will be overwritten/created relative to the baseURL
-     *
-     * @param rawdata
-     *              if null Retrofit will throw a IllegalArgumentException: Body parameter value must not be null
-     *              exception.
-     *              if you pass an empty String okhttp3 will throw a java.lang.NullPointerException
-     *              with Info "No data supplied."
-     *
+     * @param path    if empty/null, data will be overwritten/created under the root of the baseURL
+     *                Be careful with this as this can clear all the data under your root and
+     *                replace it with the object you are passing
+     *                if not null, data will be overwritten/created relative to the baseURL
+     * @param rawdata if null Retrofit will throw a IllegalArgumentException: Body parameter value must not be null
+     *                exception.
+     *                if you pass an empty String okhttp3 will throw a java.lang.NullPointerException
+     *                with Info "No data supplied."
      * @return {@link FirebaseResponse}
-     *
      */
 
     public FirebaseResponse put(String path, String rawdata) throws Exception {
@@ -360,7 +354,7 @@ public class FirebaseSvc {
 
         FirebaseResponse firebaseResponse;
 
-        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),rawdata);
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), rawdata);
 
         Call<ResponseBody> call = this.firebaseSvcApiNoConverter.put(path, body);
 
@@ -374,15 +368,11 @@ public class FirebaseSvc {
 
 
     /**
-     *
      * DELETE data on the path relative to the baseURL
      *
-     *
-     * @param path  if empty/null, data will be deleted under the root of the baseURL
-     *              Be careful with this as this can clear all the data under your root
-     *
+     * @param path if empty/null, data will be deleted under the root of the baseURL
+     *             Be careful with this as this can clear all the data under your root
      * @return {@link FirebaseResponse}
-     *
      */
 
     public FirebaseResponse delete(String path) throws Exception {
@@ -404,14 +394,10 @@ public class FirebaseSvc {
     }
 
     /**
-     *
      * GET data from the path relative to the baseURL
      *
-     *
-     * @param path  if empty/null, all data under your root will be fetched
-     *
+     * @param path if empty/null, all data under your root will be fetched
      * @return {@link FirebaseResponse}
-     *
      */
 
     public FirebaseResponse get(String path) throws Exception {
@@ -433,8 +419,6 @@ public class FirebaseSvc {
     }
 
 
-
-
     /**
      *  -----------
      *  PRIVATE API
@@ -442,12 +426,10 @@ public class FirebaseSvc {
      */
 
     /**
-     *
      * Process Firebase Response
-     *
      */
 
-    private FirebaseResponse processResponse (Response<ResponseBody> response) {
+    private FirebaseResponse processResponse(Response<ResponseBody> response) {
 
         FirebaseResponse firebaseResponse;
 
@@ -467,8 +449,7 @@ public class FirebaseSvc {
                 System.out.println("can't update null " + strRawResponse);
                 firebaseResponse = new FirebaseResponse(response.code(), false, strRawResponse);
 
-            }
-            else { // success
+            } else { // success
                 firebaseResponse = new FirebaseResponse(response.code(), true, strRawResponse);
             }
         }
@@ -476,47 +457,91 @@ public class FirebaseSvc {
         return firebaseResponse;
     }
 
+    private OkHttpClient.Builder addQuery(OkHttpClient.Builder httpClient) {
 
-    private FirebaseSvcApi firebaseSvcApi () {
+        httpClient.addInterceptor(new
+
+        Interceptor() {
+            @Override
+            public okhttp3.Response intercept (Chain chain)throws IOException {
+                Request original = chain.request();
+                HttpUrl originalHttpUrl = original.url();
+
+                HttpUrl url = originalHttpUrl.newBuilder()
+                        .addQueryParameter("auth", firebaseIDToken)
+                        .build();
+
+                // Request customization: add request headers
+                Request.Builder requestBuilder = original.newBuilder()
+                        .url(url);
+
+                Request request = requestBuilder.build();
+                return chain.proceed(request);
+            }
+        }
+
+        );
+
+        return httpClient;
+    }
+
+    /**
+     * --------------------
+     * Private Constructors
+     * --------------------
+     */
+
+    private void setOkHttpBuilder () {
+
+        this.okHttpBuilder = new OkHttpClient.Builder();
+
+        if (this.firebaseIDToken != null) {
+
+            okHttpBuilder = this.addQuery(okHttpBuilder);
+
+        }
 
         // for logging/testing purposes, do not use in production environment
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient.Builder okHttpBuilder = new OkHttpClient.Builder().addInterceptor(interceptor);
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        //OkHttpClient.Builder okHttpBuilder = new OkHttpClient.Builder().addInterceptor(interceptor);
+        okHttpBuilder.addInterceptor(loggingInterceptor);
 
         // No logging
         // OkHttpClient.Builder okHttpBuilder = new OkHttpClient.Builder();
+
+    }
+
+    // Think about any possible need to make a public getter for OkHttpBuilder
+    //private OkHttpClient.Builder getOkHttpBuilder () {
+    //    return this.okHttpBuilder;
+    //}
+
+
+    private FirebaseSvcApi firebaseSvcApi () {
 
         FirebaseSvcApi api = new Retrofit.Builder()
                 .baseUrl(this.FIREBASE_REF)
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(okHttpBuilder.build())
+                .client(this.okHttpBuilder.build())
                 .build()
                 .create(FirebaseSvcApi.class);
 
         return api;
-
     }
 
     private FirebaseSvcApi firebaseSvcApiNoConverter () {
 
-        // for logging/testing purposes, do not use in production environment
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient.Builder okHttpBuilder = new OkHttpClient.Builder().addInterceptor(interceptor);
-
-        // No logging
-        // OkHttpClient.Builder okHttpBuilder = new OkHttpClient.Builder();
-
         FirebaseSvcApi api = new Retrofit.Builder()
                 .baseUrl(this.FIREBASE_REF)
-                .client(okHttpBuilder.build())
+                .client(this.okHttpBuilder.build())
                 .build()
                 .create(FirebaseSvcApi.class);
 
         return api;
 
     }
+
 
     /**
      * Method to convert Retrofit response to raw data
