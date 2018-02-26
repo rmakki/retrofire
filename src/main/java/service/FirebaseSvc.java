@@ -31,11 +31,15 @@ public class FirebaseSvc {
      * @param FIREBASE_REF firebase baseURL
      */
 
-    public FirebaseSvc(String FIREBASE_REF) {
+    public FirebaseSvc(String FIREBASE_REF, boolean httpFullLogging) {
 
         this.FIREBASE_REF = FIREBASE_REF;
 
         this.setOkHttpBuilder();
+
+        if (httpFullLogging) {
+            this.addHttpFullLogging();
+        }
 
         // Initialise reusable okhttp and Retrofit instance with json converter
         this.firebaseSvcApi = firebaseSvcApi();
@@ -50,27 +54,28 @@ public class FirebaseSvc {
      *
      * @param FIREBASE_REF    firebase baseURL
      * @param firebaseIDToken To send authenticated requests to firebase REST API using
-     *                        firebase ID tokens.
+     *                        firebase ID tokens
      *                        For more details:
      *                        https://firebase.google.com/docs/database/rest/auth#authenticate_with_an_id_token
      */
 
-    public FirebaseSvc(String FIREBASE_REF, String firebaseIDToken) {
-
-        this.FIREBASE_REF = FIREBASE_REF;
+    public FirebaseSvc(String FIREBASE_REF, String firebaseIDToken, boolean httpFullLogging) {
 
         this.firebaseIDToken = firebaseIDToken;
 
+        this.FIREBASE_REF = FIREBASE_REF;
+
         this.setOkHttpBuilder();
+
+        if (httpFullLogging) {
+            this.addHttpFullLogging();
+        }
 
         // Initialise reusable okhttp and Retrofit instance with json converter
         this.firebaseSvcApi = firebaseSvcApi();
 
         // Initialise reusable okhttp and Retrofit instance without json converter
         this.firebaseSvcApiNoConverter = firebaseSvcApiNoConverter();
-
-        // Add intereceptor to include the firebase ID Token as a query String parameter
-        // auth=<ID_TOKEN> in all requests
 
 
     }
@@ -457,6 +462,13 @@ public class FirebaseSvc {
         return firebaseResponse;
     }
 
+    /**
+     *
+     * Add intereceptor to include the firebase ID Token as a query String parameter
+     * auth=<ID_TOKEN> in all requests
+     *
+    **/
+
     private OkHttpClient.Builder addQuery(OkHttpClient.Builder httpClient) {
 
         httpClient.addInterceptor(new
@@ -485,6 +497,16 @@ public class FirebaseSvc {
         return httpClient;
     }
 
+    private void addHttpFullLogging () {
+
+        // for logging/testing purposes, do not use in production environment
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        //OkHttpClient.Builder okHttpBuilder = new OkHttpClient.Builder().addInterceptor(interceptor);
+        this.okHttpBuilder.addInterceptor(loggingInterceptor);
+
+    }
+
     /**
      * --------------------
      * Private Constructors
@@ -501,22 +523,12 @@ public class FirebaseSvc {
 
         }
 
-        // for logging/testing purposes, do not use in production environment
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        //OkHttpClient.Builder okHttpBuilder = new OkHttpClient.Builder().addInterceptor(interceptor);
-        okHttpBuilder.addInterceptor(loggingInterceptor);
-
-        // No logging
-        // OkHttpClient.Builder okHttpBuilder = new OkHttpClient.Builder();
-
     }
 
     // Think about any possible need to make a public getter for OkHttpBuilder
     //private OkHttpClient.Builder getOkHttpBuilder () {
     //    return this.okHttpBuilder;
     //}
-
 
     private FirebaseSvcApi firebaseSvcApi () {
 

@@ -17,8 +17,8 @@ import static org.junit.Assert.assertTrue;
 public class Testsuite1 {
     String FIREBASE_REF = "https://smartplayTest.firebaseio.com/";
     //FirebaseSvc fbSvc = new FirebaseSvc(FIREBASE_REF);
-    //FirebaseSvc fbSvc = new FirebaseSvc(FIREBASE_REF,"abcdefg");
-    FirebaseSvc fbSvc = new FirebaseSvc(FIREBASE_REF);
+    //FirebaseSvc fbSvc = new FirebaseSvc(FIREBASE_REF,"abcdefg",true);
+    FirebaseSvc fbSvc = new FirebaseSvc(FIREBASE_REF,true);
 
 
 
@@ -55,9 +55,6 @@ public class Testsuite1 {
 
             //This will add rawjson
             //firebaseResponse = fbSvc.post("users", rawjson);
-
-
-
         }
 
         catch (IOException e) { // Network error like connecting to fb with http instead of https
