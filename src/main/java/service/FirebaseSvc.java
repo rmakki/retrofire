@@ -510,15 +510,11 @@ public class FirebaseSvc {
         return httpClient;
     }
 
-
-    // for logging/testing purposes
-    private void addHttpFullLogging () {
-
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        this.okHttpBuilder.addInterceptor(loggingInterceptor);
-
-    }
+    /**
+     *
+     *  Create Retrofit/okhttp api instance with okhttp and json converter
+     *
+     */
 
     private FirebaseSvcApi firebaseSvcApi () {
 
@@ -532,6 +528,13 @@ public class FirebaseSvc {
         return api;
     }
 
+    /**
+     *
+     *  Create Retrofit/okhttp api instance with no converter, used when no need
+     *  to convert the json passed to an object
+     *
+     */
+
     private FirebaseSvcApi firebaseSvcApiNoConverter () {
 
         FirebaseSvcApi api = new Retrofit.Builder()
@@ -543,7 +546,6 @@ public class FirebaseSvc {
         return api;
 
     }
-
 
     /**
      * Method to convert Retrofit response to raw data
@@ -567,6 +569,20 @@ public class FirebaseSvc {
             e.printStackTrace();
         }
         return sb.toString();
+    }
+
+    /**
+     *
+     *  Add interceptor to turn on full logging
+     *
+     */
+
+    private void addHttpFullLogging () {
+
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        this.okHttpBuilder.addInterceptor(loggingInterceptor);
+
     }
 
 }
