@@ -19,12 +19,9 @@ import java.util.Map;
 public class FirebaseSvc {
 
     private String FIREBASE_REF;
-    private String oAuth2Token=null;
-    private String firebaseIDToken=null;
     private FirebaseSvcApi firebaseSvcApi;
     private FirebaseSvcApi firebaseSvcApiNoConverter;
     private OkHttpClient.Builder okHttpBuilder;
-    //private String token="auth";
 
     /**
      * Constructor
@@ -44,51 +41,47 @@ public class FirebaseSvc {
             this.addHttpFullLogging();
         }
 
-        // Initialise reusable okhttp and Retrofit instance with json converter
+        // Initialize reusable okhttp and Retrofit instance with json converter
         this.firebaseSvcApi = firebaseSvcApi();
 
-        // Initialise reusable okhttp and Retrofit instance without json converter
+        // Initialize reusable okhttp and Retrofit instance without json converter
         this.firebaseSvcApiNoConverter = firebaseSvcApiNoConverter();
     }
 
 
     /**
-     *
      * Constructor
      *
-     * @param FIREBASE_REF    firebase baseURL
-     * @param firebaseIDToken To send authenticated requests to firebase REST API using:
+     * @param FIREBASE_REF      firebase baseURL
+     * @param secureTokenParam  To send authenticated requests to firebase REST API using one of the
+     *                          following methods:
      *
-     *                        1- firebase ID tokens: auth=<ID_TOKEN>
-     *                        For more details:
-     *                        https://firebase.google.com/docs/database/rest/auth#authenticate_with_an_id_token
+     *                          1- pass "auth" if you are using firebase ID tokens to authenticate
+     *                          For more details:
+     *                          https://firebase.google.com/docs/database/rest/auth#authenticate_with_an_id_token
      *
-     *                        OR
+     *                          OR
      *
-     *                        2- pass the Google OAuth2 access token: access_token=<ACCESS_TOKEN>
-     *                        For more details:
-     *                        https://firebase.google.com/docs/database/rest/auth#authenticate_with_an_access_token
+     *                          2- pass "access_token" if you are using Google OAuth2 access token
+     *                          For more details:
+     *                          https://firebase.google.com/docs/database/rest/auth#authenticate_with_an_access_token
+     *
+     * @param secureTokenValue  pass the the value of the secureToken (firebase ID token or Google OAuth2 token)
      *
      * @param httpFullLogging pass true for full http log. ONLY for testing purposes, make sure
      *                        you pass false in production code
      *
      */
 
-    public FirebaseSvc(String FIREBASE_REF, String firebaseIDToken, boolean httpFullLogging) {
+    public FirebaseSvc(String FIREBASE_REF, String secureTokenParam, String secureTokenValue, boolean httpFullLogging) {
 
-        this.firebaseIDToken = firebaseIDToken;
 
         this.FIREBASE_REF = FIREBASE_REF;
 
         this.okHttpBuilder = new OkHttpClient.Builder();
 
-        if (this.firebaseIDToken != null) {
-            //  adds auth=<firebaseIDToken> to all http requests, required per firebase
-            //  documentation if using firebase ID tokens to authenticate requests
-
-            okHttpBuilder = this.addQuery(okHttpBuilder, "auth", this.firebaseIDToken);
-
-        }
+        // adds auth=<secureTokenValue> or access_token=<secureTokenValue> as query string parameters to all http requests
+        this.okHttpBuilder = this.addQuery(okHttpBuilder, secureTokenParam, secureTokenValue);
 
         if (httpFullLogging) {
             this.addHttpFullLogging();
@@ -101,16 +94,6 @@ public class FirebaseSvc {
         this.firebaseSvcApiNoConverter = firebaseSvcApiNoConverter();
 
     }
-    /*
-    else if (this.oAuth2Token != null) {
-            // adds auth=<oAuth2Token> to all http requests, required per firebase documentation
-            // if using oAuth2 tokens to authenticate requests
-            okHttpBuilder = this.addQuery(okHttpBuilder, "", this.oAuth2Token);
-
-        }
-     */
-
-    /*
 
     /**
      * PATCH data on the path relative to the baseURL
@@ -495,7 +478,7 @@ public class FirebaseSvc {
 
     /**
      *
-     *  Add interceptor to add query parameters in the form param=<value> in all http requests
+     *  Add interceptor to add query string parameters in the form param=<value> to all http requests
      *
     **/
 
@@ -510,9 +493,7 @@ public class FirebaseSvc {
                 HttpUrl originalHttpUrl = original.url();
 
                 HttpUrl url = originalHttpUrl.newBuilder()
-                        //.addQueryParameter(token, firebaseIDToken)
                         .addQueryParameter(param, value)
-
                         .build();
 
                 // Request customization: add request headers
@@ -530,16 +511,14 @@ public class FirebaseSvc {
     }
 
 
+    // for logging/testing purposes
     private void addHttpFullLogging () {
 
-        // for logging/testing purposes, do not use in production environment
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        //OkHttpClient.Builder okHttpBuilder = new OkHttpClient.Builder().addInterceptor(interceptor);
         this.okHttpBuilder.addInterceptor(loggingInterceptor);
 
     }
-
 
     private FirebaseSvcApi firebaseSvcApi () {
 
@@ -571,6 +550,7 @@ public class FirebaseSvc {
      *
      * @param response
      * @return String
+     *
      */
 
     private String fromInputDataToString(Response<ResponseBody> response) {
