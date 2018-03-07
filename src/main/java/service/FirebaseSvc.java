@@ -446,19 +446,30 @@ public class FirebaseSvc {
 
     /**
      * Process Firebase Response
+     *
      */
 
-    private FirebaseResponse processResponse(Response<ResponseBody> response) {
+    private FirebaseResponse processResponseold(Response<ResponseBody> response) {
 
         FirebaseResponse firebaseResponse;
 
-        String strRawResponse = fromInputDataToString(response);
+        //0 String strRawResponse = fromInputDataToString(response);
+        String strRawResponse=null;
+
+
+        if (response.isSuccessful()) {
+            strRawResponse = fromInputDataToString(response);
+        }
 
         if (!response.isSuccessful()) {
             // Error from firebase with possible codes 403, 404, 417
             // for more details https://www.firebase.com/docs/rest/api/#section-error-conditions
-            System.out.println("error " + strRawResponse);
-            firebaseResponse = new FirebaseResponse(response.code(), false, strRawResponse);
+            //1 System.out.println("error " + strRawResponse);
+            System.out.println("error " + response.toString());
+
+            //2firebaseResponse = new FirebaseResponse(response.code(), false, strRawResponse);
+            firebaseResponse = new FirebaseResponse(response.code(), false, response.toString());
+
 
         } else {
             // firebase returned 200 success but null body: no change happened in firebase
@@ -475,6 +486,64 @@ public class FirebaseSvc {
 
         return firebaseResponse;
     }
+
+
+    /**
+     * Process Firebase Response
+     *
+     */
+
+    private FirebaseResponse processResponse(Response<ResponseBody> response) {
+
+        FirebaseResponse firebaseResponse;
+
+        if (!response.isSuccessful()) {
+            // Error from firebase, example codes 401, 403, 404, 417
+            // for more details https://www.firebase.com/docs/rest/api/#section-error-conditions
+
+            System.out.println("error code " + response.code());
+            System.out.println("error message " + response.message());
+            System.out.println("error json body " + fromInputDataToString2(response.errorBody()));
+            // {  "error" : "Could not parse auth token."}
+
+            //2firebaseResponse = new FirebaseResponse(response.code(), false, strRawResponse);
+            firebaseResponse = new FirebaseResponse(response.code(), false, fromInputDataToString2(response.errorBody()));
+
+
+        } else {
+            // firebase returned 200 success but null body: no change happened in firebase
+            // It may happen for example if you send null data to be updated
+            if ((response).body().equals("null")) {
+
+                System.out.println("can't update null " + response.raw().toString());
+                firebaseResponse = new FirebaseResponse(response.code(), false, "null");
+                System.out.println("code " + response.code());
+                System.out.println("message " + response.message());
+                System.out.println("json body " + fromInputDataToString2(response.body()));
+
+
+            } else { // success
+                firebaseResponse = new FirebaseResponse(response.code(), true, fromInputDataToString2(response.body()));
+
+                System.out.println("success code " + response.code());
+                System.out.println("success message " + response.message());
+                System.out.println("success json body " + fromInputDataToString2(response.body()));
+                // test
+                System.out.println("success " + response.raw().toString());
+                System.out.println("success " + response.body().toString());
+                System.out.println("success " + fromInputDataToString(response));
+                System.out.println("success " + response.toString());
+                System.out.println("success " + response.message().toString());
+                // {"name":"-L6xn9vZmRMWX9Qwj3KK"} // returns key of posted data
+
+            }
+        }
+
+        return firebaseResponse;
+    }
+
+
+
 
     /**
      *
@@ -560,6 +629,22 @@ public class FirebaseSvc {
         BufferedReader reader = null;
         StringBuilder sb = new StringBuilder();
         reader = new BufferedReader(new InputStreamReader(response.body().byteStream()));
+        String line;
+        try {
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return sb.toString();
+    }
+
+    private String fromInputDataToString2(ResponseBody response) {
+
+        BufferedReader reader = null;
+        StringBuilder sb = new StringBuilder();
+        reader = new BufferedReader(new InputStreamReader(response.byteStream()));
         String line;
         try {
             while ((line = reader.readLine()) != null) {

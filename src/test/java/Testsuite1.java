@@ -17,7 +17,7 @@ import static org.junit.Assert.assertTrue;
 public class Testsuite1 {
     String FIREBASE_REF = "https://smartplayTest.firebaseio.com/";
     //FirebaseSvc fbSvc = new FirebaseSvc(FIREBASE_REF);
-    FirebaseSvc fbSvc = new FirebaseSvc(FIREBASE_REF,"auth","abcdefg",true);
+   FirebaseSvc fbSvc = new FirebaseSvc(FIREBASE_REF,"auth","abcdefg",true);
     //FirebaseSvc fbSvc = new FirebaseSvc(FIREBASE_REF,true);
 
 
