@@ -457,15 +457,10 @@ public class FirebaseSvc {
         if (!response.isSuccessful()) {
             // Error from firebase, example codes 401, 403, 404, 417
             // for more details https://www.firebase.com/docs/rest/api/#section-error-conditions
+            // Sample body: {  "error" : "Could not parse auth token."}
 
-            System.out.println("error code " + response.code());
-            System.out.println("error message " + response.message());
-            System.out.println("error json body " + fromInputDataToString(response.errorBody()));
-            // {  "error" : "Could not parse auth token."}
-
-            //2firebaseResponse = new FirebaseResponse(response.code(), false, strRawResponse);
-            firebaseResponse = new FirebaseResponse(response.code(), false, fromInputDataToString(response.errorBody()));
-
+            firebaseResponse = new FirebaseResponse(response.code(), response.message(), false, fromInputDataToString(response.errorBody()));
+            System.out.println(firebaseResponse.toString());
 
         } else {
             // firebase returned 200 success but null body: no change happened in firebase
@@ -473,34 +468,22 @@ public class FirebaseSvc {
             if ((response).body().equals("null")) {
 
                 System.out.println("can't update null " + response.raw().toString());
-                firebaseResponse = new FirebaseResponse(response.code(), false, "null");
-                System.out.println("code " + response.code());
-                System.out.println("message " + response.message());
-                System.out.println("json body " + fromInputDataToString(response.body()));
+                firebaseResponse = new FirebaseResponse(response.code(), response.message(), false, "null");
+                System.out.println(firebaseResponse.toString());
 
 
             } else { // success
-                firebaseResponse = new FirebaseResponse(response.code(), true, fromInputDataToString(response.body()));
+                     // Sample success body: {"name":"-L6xn9vZmRMWX9Qwj3KK"} // returns key of posted data
 
-                System.out.println("success code " + response.code());
-                System.out.println("success message " + response.message());
-                System.out.println("success json body " + fromInputDataToString(response.body()));
-                // test
-                System.out.println("success " + response.raw().toString());
-                System.out.println("success " + response.body().toString());
-                System.out.println("success " + response.toString());
-                System.out.println("success " + response.message().toString());
-                // {"name":"-L6xn9vZmRMWX9Qwj3KK"} // returns key of posted data
+                firebaseResponse = new FirebaseResponse(response.code(), response.message(), true, fromInputDataToString(response.body()));
+                System.out.println(firebaseResponse.toString());
 
             }
         }
 
         return firebaseResponse;
     }
-
-
-
-
+    
     /**
      *
      *  Add interceptor to add query string parameters in the form param=<value> to all http requests
