@@ -144,11 +144,11 @@ public class Testsuite1 {
         try {
 
             // This will update userF data
-            // format: users/<firebasekey>/userpatch & users/<firebasekey>/password
+            // format: users/<firebasekey>/userput & users/<firebasekey>/password
             // firebaseResponse = fbSvc.put("users/-KvcV06UQENpcyPdzCKm", userF);
 
             // This will update userF data using a Map
-            // This will update a node under users/<firebasekey>/userpatch & users/<firebasekey>/patchpassword
+            // This will update a node under users/<firebasekey>/userput & users/<firebasekey>/putpassword
              //firebaseResponse = fbSvc.put("users", dataMap);
 
             // This will update userF data by sending rawjson

@@ -17,11 +17,27 @@ public class Examples {
 
         try {
             // Delete
-            FirebaseResponse firebaseResponse = fbSvc.delete(""); // Delete root (clears data from previous tests)
+            // The example below Deletes the root (clears data from previous tests)
+            FirebaseResponse firebaseResponse = fbSvc.delete("");
+
+            // There are three ways you can pass data to PUT POST and PATCH requests:
+            // 1- pass the path and any object
+            // 2- pass the path and a MAP object
+            // 3- pass the path and raw json data
+
+            // PUT request passing path and any object
+            UserDetails user1 = new UserDetails("uid1",100,150,70, "I love travel and discovering new cultures");
+
+            fbSvc.put("userDetails/uid1",user1);
+
+            // PUT request passing a path and raw json data
+            // let's add another user
+            // String rawjson1 = "{\"uid\":\"uid2\",\"nb_followers\":\"4000\",\"nb_following\":\"1000\\,\"nb_followers\":\"4000\\}";
 
 
-            // PUT
-
+            //UserDetails user2 = new UserDetails("uid2",4000,1000,300, "Musician/Band");
+            // LinkedHashMap<String, Object> datamap = new LinkedHashMap<String, Object>();
+            // user2.put("uid2",)
             // deletes the key and everything under it
             // firebaseResponse = fbSvc.delete("users/-KvcV06UQENpcyPdzCKm");
 
