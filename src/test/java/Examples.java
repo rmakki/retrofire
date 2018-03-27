@@ -32,8 +32,9 @@ public class Examples {
 
             // PUT request passing a path and raw json data
             // let's add another user
-            // String rawjson1 = "{\"uid\":\"uid2\",\"nb_followers\":\"4000\",\"nb_following\":\"1000\\,\"nb_followers\":\"4000\\}";
+            String rawjson = "{\"userUID\":\"uid2\",\"nb_followers\":\"4000\",\"nb_following\":\"1000\",\"nb_posts\":\"300\"}";
 
+            fbSvc.put("userDetails/uid2",rawjson);
 
             //UserDetails user2 = new UserDetails("uid2",4000,1000,300, "Musician/Band");
             // LinkedHashMap<String, Object> datamap = new LinkedHashMap<String, Object>();
