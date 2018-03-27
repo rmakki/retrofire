@@ -10,6 +10,7 @@ public class FirebaseResponse {
     private boolean success;
     private String body;
 
+
     public FirebaseResponse(int code, String message, boolean success, String body ) {
         this.code = code;
         this.message = message;

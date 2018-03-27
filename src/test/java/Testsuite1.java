@@ -17,10 +17,8 @@ import static org.junit.Assert.assertTrue;
 public class Testsuite1 {
     String FIREBASE_REF = "https://smartplayTest.firebaseio.com/";
     //FirebaseSvc fbSvc = new FirebaseSvc(FIREBASE_REF);
-   //FirebaseSvc fbSvc = new FirebaseSvc(FIREBASE_REF,"auth","abcdefg",true);
+    //FirebaseSvc fbSvc = new FirebaseSvc(FIREBASE_REF,"auth","abcdefg",true);
     FirebaseSvc fbSvc = new FirebaseSvc(FIREBASE_REF,true);
-
-
 
     @BeforeClass
     public static void TestBefore() {
@@ -88,8 +86,8 @@ public class Testsuite1 {
         System.out.println("End of TestPOST");
     }
 
+/*
 
-    /*
     @Test
     public void TestPATCH(){
 
@@ -99,7 +97,8 @@ public class Testsuite1 {
         LinkedHashMap<String, Object> dataMap = new LinkedHashMap<String, Object>();
         FirebaseResponse firebaseResponse = null;
         //dataMap.put("subnode",userF);
-        dataMap.put("-KvcV06UQENpcyPdzCKm",userF);
+        dataMap.put("-KvcV06UQENpcyPdzCKm",userF); //L6xn9vZmRMWX9Qwj3KK
+        //dataMap.put("-L6xn9vZmRMWX9Qwj3KK",userF);
 
         try {
 
@@ -112,7 +111,7 @@ public class Testsuite1 {
             // firebaseResponse = fbSvc.patch("users", dataMap);
 
             // This will update userF data by sending rawjson
-             firebaseResponse = fbSvc.patch("users/-KvcV06UQENpcyPdzCKm", rawjson);
+             firebaseResponse = fbSvc.patch("users/L6xn9vZmRMWX9Qwj3KK", rawjson);
 
         }
 
@@ -129,8 +128,8 @@ public class Testsuite1 {
         assertTrue(firebaseResponse.isSuccess());
         System.out.println("End of TestPATCH");
     }
-*/
 
+*/
     /*
     @Test
     public void TestPUT(){

@@ -483,7 +483,7 @@ public class FirebaseSvc {
 
         return firebaseResponse;
     }
-    
+
     /**
      *
      *  Add interceptor to add query string parameters in the form param=<value> to all http requests
