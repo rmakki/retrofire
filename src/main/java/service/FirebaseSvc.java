@@ -66,7 +66,7 @@ public class FirebaseSvc {
      *                          For more details:
      *                          https://firebase.google.com/docs/database/rest/auth#authenticate_with_an_access_token
      *
-     * @param secureTokenValue  pass the the value of the secureToken (firebase ID token or Google OAuth2 token)
+     * @param secureTokenValue  pass the value of the secureToken (firebase ID token or Google OAuth2 token)
      *
      * @param httpFullLogging pass true for full http log. ONLY for testing purposes, make sure
      *                        you pass false in production code
