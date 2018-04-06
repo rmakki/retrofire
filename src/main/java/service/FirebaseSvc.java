@@ -8,6 +8,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofitApi.FirebaseSvcApi;
+import model.UserDetails;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -437,6 +439,23 @@ public class FirebaseSvc {
 
     }
 
+    public UserDetails getUserDetails(String path) throws Exception {
+
+        if (path == null) {
+            path = "";
+        }
+
+        FirebaseResponse firebaseResponse;
+
+        Call<UserDetails> call = this.firebaseSvcApi.getUserDetails(path);
+
+        UserDetails response = call.execute().body();
+        return response;
+
+
+    }
+
+
 
     /**
      *  -----------
@@ -465,20 +484,22 @@ public class FirebaseSvc {
         } else {
             // firebase returned 200 success but null body: no change happened in firebase
             // It may happen for example if you send null data to be updated
-            if ((response).body().equals("null")) {
+
+            /* if (fromInputDataToString(response.body()).equals("null")) {
 
                 System.out.println("can't update null " + response.raw().toString());
                 firebaseResponse = new FirebaseResponse(response.code(), response.message(), false, "null");
-                System.out.println(firebaseResponse.toString());
+                System.out.println("null case " + firebaseResponse.toString());
 
 
-            } else { // success
-                     // Sample success body: {"name":"-L6xn9vZmRMWX9Qwj3KK"} // returns key of posted data
+            } else { */
+                        // success
+                        // Sample success body: {"name":"-L6xn9vZmRMWX9Qwj3KK"} // returns key of posted data
 
                 firebaseResponse = new FirebaseResponse(response.code(), response.message(), true, fromInputDataToString(response.body()));
                 System.out.println(firebaseResponse.toString());
 
-            }
+            //}
         }
 
         return firebaseResponse;

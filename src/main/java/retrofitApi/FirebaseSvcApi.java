@@ -1,5 +1,6 @@
 package retrofitApi;
 
+import model.UserDetails;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -16,10 +17,7 @@ public interface FirebaseSvcApi {
 	// Required extension by firebase
 	String FB_REST_SVC_PATH = ".json";
 
-    @GET("/" + "{path}" + FB_REST_SVC_PATH)
-    Call<ResponseBody> get(@Path("path") String path);
-
-    @PATCH("/" + "{path}" + FB_REST_SVC_PATH)
+	@PATCH("/" + "{path}" + FB_REST_SVC_PATH)
 	Call<ResponseBody> patch(@Path("path") String path, @Body Object data);
 
 	// For raw json
@@ -42,6 +40,20 @@ public interface FirebaseSvcApi {
 
 	@DELETE("/" + "{path}" + FB_REST_SVC_PATH)
 	Call<ResponseBody> delete(@Path("path") String path);
+
+	@GET("/" + "{path}" + FB_REST_SVC_PATH)
+	Call<ResponseBody> get(@Path("path") String path);
+
+	/**
+	 * I have attempted to make this library generic enough to serve most use cases, but you can easily
+	 * customize it to your need if you wish to specify the POJO expected to be returned from firebase.
+	 * In this case Retrofit will efficiently under the hood do the json to object translation for you
+	 * In the sample method below, you can replace UserDetails by a class that you use in your project,
+	 * or you can just use the generic format in the previous get method above and opt to do the json to
+	 * object translation using Gson by yourself
+	 */
+	@GET("/" + "{path}" + FB_REST_SVC_PATH)
+	Call<UserDetails> getUserDetails(@Path("path") String path);
 
 
 }
