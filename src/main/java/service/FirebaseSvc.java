@@ -578,7 +578,8 @@ public class FirebaseSvc {
 
     /**
      *
-     *  Add interceptor to add a query string parameter in the form param=<value> to one or all http requests
+     *  Add interceptor to add a query string parameter in the form param=<value> to all http requests:
+     *  Used to add authentication parameters only
      *
     **/
 
@@ -593,33 +594,15 @@ public class FirebaseSvc {
                 HttpUrl originalHttpUrl = original.url();
                 System.out.println("original url: " + originalHttpUrl.toString());
 
-
-                HttpUrl.Builder httpUrlbuilder = originalHttpUrl.newBuilder();
-                // Check if there are any one time parameters to add to the request
-                if (!(queryParam.isEmpty()) || (!(queryParam == null))) {
-                    for (Map.Entry<String, String> entry : queryParam.entrySet()) {
-                        httpUrlbuilder.addQueryParameter(entry.getKey(), entry.getValue());
-                    }
-                }
-                // Add the recurrent parameter (ex: auth or access_token)
-                httpUrlbuilder.addQueryParameter(param,value);
-
-                HttpUrl url = httpUrlbuilder.build();
-
-                /*  HttpUrl url = originalHttpUrl.newBuilder()
+                HttpUrl url = originalHttpUrl.newBuilder()
                         .addQueryParameter(param, value)
                         .build();
-                */
 
                 // Request customization: add request headers
                 Request.Builder requestBuilder = original.newBuilder()
                         .url(url);
 
                 Request request = requestBuilder.build();
-
-                // clear the one time parameters so that they don't get added when future requests
-                // are intercepted
-                queryParam.clear();
 
                 return chain.proceed(request);
             }
