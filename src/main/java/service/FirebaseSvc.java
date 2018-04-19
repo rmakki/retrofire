@@ -13,6 +13,7 @@ import model.UserDetails;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -24,7 +25,7 @@ public class FirebaseSvc {
     private FirebaseSvcApi firebaseSvcApi;
     private FirebaseSvcApi firebaseSvcApiNoConverter;
     private OkHttpClient.Builder okHttpBuilder;
-
+    private Map<String, String> queryParam;
     /**
      * Constructor
      *
@@ -38,6 +39,7 @@ public class FirebaseSvc {
         this.FIREBASE_REF = FIREBASE_REF;
 
         this.okHttpBuilder = new OkHttpClient.Builder();
+        this.queryParam = new HashMap();
 
         if (httpFullLogging) {
             this.addHttpFullLogging();
@@ -81,6 +83,7 @@ public class FirebaseSvc {
         this.FIREBASE_REF = FIREBASE_REF;
 
         this.okHttpBuilder = new OkHttpClient.Builder();
+        this.queryParam = new HashMap();
 
         // adds auth=<secureTokenValue> or access_token=<secureTokenValue> as query string parameters to all http requests
         this.okHttpBuilder = this.addQuery(okHttpBuilder, secureTokenParam, secureTokenValue);
@@ -99,7 +102,7 @@ public class FirebaseSvc {
 
     /**
      * PATCH data on the path relative to the baseURL
-     * <p>
+     *
      * Firebase will only update the fields passed.
      * If the fields passed do not exist, they will be added to firebase
      *
@@ -131,9 +134,10 @@ public class FirebaseSvc {
     }
 
     /**
-     * PATCH data on the path relative to the baseURL
-     * <p>
-     * Firebase will only update the fields passed.
+     * PATCH data on the path relative to the baseURL - Update
+     *
+     * Named children in the data being written with PATCH are overwritten,
+     * but omitted children are not deleted.
      * If the fields passed do not exist, they will be added to firebase
      *
      * @param path if empty/null, data will be updated under the root of the baseURL
@@ -202,7 +206,9 @@ public class FirebaseSvc {
      *             if that is your expectation. Firebase will return a success
      *             but the call will not change the state of your firebase instance
      *             (as if you did not make a call, no data posted)
-     * @return {@link FirebaseResponse}
+     * @return {@link FirebaseResponse} (if the request is successful the .body of FirebaseResponse
+     * will contain the child name of the new data specified in the POST request. See Examples.java for usage
+     * )
      */
 
     public FirebaseResponse post(String path, Object data) throws Exception {
@@ -429,6 +435,7 @@ public class FirebaseSvc {
 
         FirebaseResponse firebaseResponse;
 
+       // Call<ResponseBody> call = this.firebaseSvcApi.get(path,"\"nb_followers\"","500");
         Call<ResponseBody> call = this.firebaseSvcApi.get(path);
 
         Response<ResponseBody> response = call.execute();
@@ -438,6 +445,13 @@ public class FirebaseSvc {
         return firebaseResponse;
 
     }
+
+
+    /**
+     * GET using a POJO
+     * See Examples.java and FirebaseSvcApi.java for usage
+     *
+     */
 
     public UserDetails getUserDetails(String path) throws Exception {
 
@@ -455,7 +469,45 @@ public class FirebaseSvc {
 
     }
 
+    /**
+     *  Add a query string parameter in the form param=<value> to an http Request
+     *  Check out firebase documentation for possible REST query parameters
+     *  https://firebase.google.com/docs/reference/rest/database/
+     *
+     */
 
+    public void addQueryParam(Map<String,String> map) {
+
+        if (this.queryParam == null) {
+            this.queryParam = new HashMap();
+        }
+        if (!this.queryParam.isEmpty()) {
+            for (Map.Entry<String, String> entry : queryParam.entrySet()) {
+                this.queryParam.put(entry.getKey(),entry.getValue());
+            }
+
+        } else {
+            this.queryParam = map;
+        }
+
+    }
+
+    /**
+     *  Add a query string parameter in the form param=<value> to an http Request
+     *  Check out firebase documentation for possible REST query parameters
+     *  https://firebase.google.com/docs/reference/rest/database/
+     *
+     */
+
+    public void addQueryParam(String param, String value) {
+
+        if (this.queryParam == null) {
+            this.queryParam = new HashMap();
+        }
+
+        this.queryParam.put(param, value);
+
+    }
 
     /**
      *  -----------
@@ -507,7 +559,7 @@ public class FirebaseSvc {
 
     /**
      *
-     *  Add interceptor to add query string parameters in the form param=<value> to all http requests
+     *  Add interceptor to add a query string parameter in the form param=<value> to one or all http requests
      *
     **/
 
@@ -520,16 +572,36 @@ public class FirebaseSvc {
             public okhttp3.Response intercept (Chain chain)throws IOException {
                 Request original = chain.request();
                 HttpUrl originalHttpUrl = original.url();
+                System.out.println("original url: " + originalHttpUrl.toString());
 
-                HttpUrl url = originalHttpUrl.newBuilder()
+
+                HttpUrl.Builder httpUrlbuilder = originalHttpUrl.newBuilder();
+                // Check if there are any one time parameters to add to the request
+                if (!(queryParam.isEmpty()) || (!(queryParam == null))) {
+                    for (Map.Entry<String, String> entry : queryParam.entrySet()) {
+                        httpUrlbuilder.addQueryParameter(entry.getKey(), entry.getValue());
+                    }
+                }
+                // Add the recurrent parameter (ex: auth or access_token)
+                httpUrlbuilder.addQueryParameter(param,value);
+
+                HttpUrl url = httpUrlbuilder.build();
+
+                /*  HttpUrl url = originalHttpUrl.newBuilder()
                         .addQueryParameter(param, value)
                         .build();
+                */
 
                 // Request customization: add request headers
                 Request.Builder requestBuilder = original.newBuilder()
                         .url(url);
 
                 Request request = requestBuilder.build();
+
+                // clear the one time parameters so that they don't get added when future requests
+                // are intercepted
+                queryParam.clear();
+
                 return chain.proceed(request);
             }
         }

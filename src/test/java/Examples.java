@@ -12,7 +12,7 @@ public class Examples {
         String FIREBASE_REF = "https://smartplayTest.firebaseio.com/";
 
         // Create firebase reference with Full logging. Make sure you set to false in production
-        FirebaseSvc fbSvc = new FirebaseSvc(FIREBASE_REF,true);
+        FirebaseSvc fbSvc = new FirebaseSvc(FIREBASE_REF,"tr","test",true);
 
         // examples
 
@@ -90,6 +90,14 @@ public class Examples {
                     System.out.println("GET path not found");
                 }
             }
+
+            // GET with query parameters
+            // Let's retrieve users with nb_followers equal or greater than 100
+            fbSvc.addQueryParam("orderBy", "\"nb_followers\"");
+            fbSvc.addQueryParam("startAt","500");
+            firebaseResponse = fbSvc.get("userDetails");
+            System.out.println("Users with at least 500 followers: " + firebaseResponse.toString());
+
 
             // GET - customized call example with POJO
             // You will have to modify FirebaseSvcApi and FirebaseSvc to match your use case
