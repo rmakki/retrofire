@@ -6,6 +6,8 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.*;
 
+import java.util.Map;
+
 
 /**
  *   
@@ -42,8 +44,9 @@ public interface FirebaseSvcApi {
 	Call<ResponseBody> delete(@Path("path") String path);
 
 	@GET("/" + "{path}" + FB_REST_SVC_PATH)
-	Call<ResponseBody> get(@Path("path") String path);
+	Call<ResponseBody> get(@Path("path") String path, @QueryMap Map<String,String> queryMap);
 
+	// test
 	@GET("/" + "{path}" + FB_REST_SVC_PATH)
 	Call<ResponseBody> get(@Path("path") String path,@Query("orderBy") String orderBy, @Query("startAt") String equalTo);
 	/**
@@ -55,7 +58,7 @@ public interface FirebaseSvcApi {
 	 * object translation using Gson by yourself
 	 */
 	@GET("/" + "{path}" + FB_REST_SVC_PATH)
-	Call<UserDetails> getUserDetails(@Path("path") String path);
+	Call<UserDetails> getUserDetails(@Path("path") String path, @QueryMap Map<String,String> queryMap);
 
 
 }
