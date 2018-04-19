@@ -34,11 +34,11 @@ public interface FirebaseSvcApi {
 	Call<ResponseBody> post(@Path("path") String path, @Body RequestBody body);
 
 	@PUT("/" + "{path}" + FB_REST_SVC_PATH)
-	Call<ResponseBody> put(@Path("path") String path, @Body Object data);
+	Call<ResponseBody> put(@Path("path") String path, @Body Object data, @QueryMap Map<String,String> queryMap);
 
 	// For raw json
 	@PUT("/" + "{path}" + FB_REST_SVC_PATH)
-	Call<ResponseBody> put(@Path("path") String path, @Body RequestBody body);
+	Call<ResponseBody> put(@Path("path") String path, @Body RequestBody body, @QueryMap Map<String,String> queryMap);
 
 	@DELETE("/" + "{path}" + FB_REST_SVC_PATH)
 	Call<ResponseBody> delete(@Path("path") String path, @QueryMap Map<String,String> queryMap);
