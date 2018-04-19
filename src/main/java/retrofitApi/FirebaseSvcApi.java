@@ -41,7 +41,7 @@ public interface FirebaseSvcApi {
 	Call<ResponseBody> put(@Path("path") String path, @Body RequestBody body);
 
 	@DELETE("/" + "{path}" + FB_REST_SVC_PATH)
-	Call<ResponseBody> delete(@Path("path") String path);
+	Call<ResponseBody> delete(@Path("path") String path, @QueryMap Map<String,String> queryMap);
 
 	@GET("/" + "{path}" + FB_REST_SVC_PATH)
 	Call<ResponseBody> get(@Path("path") String path, @QueryMap Map<String,String> queryMap);

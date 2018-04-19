@@ -410,9 +410,11 @@ public class FirebaseSvc {
 
         FirebaseResponse firebaseResponse;
 
-        Call<ResponseBody> call = this.firebaseSvcApi.delete(path);
+        Call<ResponseBody> call = this.firebaseSvcApi.delete(path, this.queryParam);
 
         Response<ResponseBody> response = call.execute();
+
+        this.queryParam.clear();
 
         firebaseResponse = processResponse(response);
 
@@ -442,9 +444,9 @@ public class FirebaseSvc {
 
         Response<ResponseBody> response = call.execute();
 
-        firebaseResponse = processResponse(response);
-
         this.queryParam.clear();
+
+        firebaseResponse = processResponse(response);
 
         return firebaseResponse;
 
