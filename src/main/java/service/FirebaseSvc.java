@@ -219,9 +219,11 @@ public class FirebaseSvc {
 
         FirebaseResponse firebaseResponse;
 
-        Call<ResponseBody> call = this.firebaseSvcApi.post(path, data);
+        Call<ResponseBody> call = this.firebaseSvcApi.post(path, data, this.queryParam);
 
         Response<ResponseBody> response = call.execute();
+
+        this.queryParam.clear();
 
         firebaseResponse = processResponse(response);
 
@@ -285,9 +287,11 @@ public class FirebaseSvc {
 
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), rawdata);
 
-        Call<ResponseBody> call = this.firebaseSvcApiNoConverter.post(path, body);
+        Call<ResponseBody> call = this.firebaseSvcApiNoConverter.post(path, body, this.queryParam);
 
         Response<ResponseBody> response = call.execute();
+
+        this.queryParam.clear();
 
         firebaseResponse = processResponse(response);
 
