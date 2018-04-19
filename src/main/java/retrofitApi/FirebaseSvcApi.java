@@ -46,9 +46,6 @@ public interface FirebaseSvcApi {
 	@GET("/" + "{path}" + FB_REST_SVC_PATH)
 	Call<ResponseBody> get(@Path("path") String path, @QueryMap Map<String,String> queryMap);
 
-	// test
-	@GET("/" + "{path}" + FB_REST_SVC_PATH)
-	Call<ResponseBody> get(@Path("path") String path,@Query("orderBy") String orderBy, @Query("startAt") String equalTo);
 	/**
 	 * I have attempted to make this library generic enough to serve most use cases, but you can easily
 	 * customize it to your need if you wish to specify the POJO expected to be returned from firebase.

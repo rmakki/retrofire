@@ -449,10 +449,7 @@ public class FirebaseSvc {
 
         FirebaseResponse firebaseResponse;
 
-        //Call<ResponseBody> call = this.firebaseSvcApi.get(path,"\"nb_followers\"","500");
-        //Call<ResponseBody> call = this.firebaseSvcApi.get(path,null,null);
-
-         Call<ResponseBody> call = this.firebaseSvcApi.get(path,this.queryParam);
+        Call<ResponseBody> call = this.firebaseSvcApi.get(path,this.queryParam);
 
         Response<ResponseBody> response = call.execute();
 
