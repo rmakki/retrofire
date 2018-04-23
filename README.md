@@ -18,7 +18,7 @@ you wished if there is a java wrapper to firebase REST api using Retrofit and ok
 
 If you agree with 1 + 2 + 3 then Retrofire is for you!
 
-#Setup
+# Setup
 Beta release
 Maven and Gradle usage coming soon
 
