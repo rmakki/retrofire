@@ -547,27 +547,16 @@ public class FirebaseSvc {
             // Sample body: {  "error" : "Could not parse auth token."}
 
             firebaseResponse = new FirebaseResponse(response.code(), response.message(), false, fromInputDataToString(response.errorBody()));
-            System.out.println(firebaseResponse.toString());
+            //System.out.println(firebaseResponse.toString());
 
         } else {
-            // firebase returned 200 success but null body: no change happened in firebase
-            // It may happen for example if you send null data to be updated
 
-            /* if (fromInputDataToString(response.body()).equals("null")) {
-
-                System.out.println("can't update null " + response.raw().toString());
-                firebaseResponse = new FirebaseResponse(response.code(), response.message(), false, "null");
-                System.out.println("null case " + firebaseResponse.toString());
-
-
-            } else { */
-                        // success
-                        // Sample success body: {"name":"-L6xn9vZmRMWX9Qwj3KK"} // returns key of posted data
+            // success
+            // Sample success body: {"name":"-L6xn9vZmRMWX9Qwj3KK"} // returns key of posted data
 
                 firebaseResponse = new FirebaseResponse(response.code(), response.message(), true, fromInputDataToString(response.body()));
-                System.out.println(firebaseResponse.toString());
+                //System.out.println(firebaseResponse.toString());
 
-            //}
         }
 
         return firebaseResponse;
@@ -589,7 +578,7 @@ public class FirebaseSvc {
             public okhttp3.Response intercept (Chain chain)throws IOException {
                 Request original = chain.request();
                 HttpUrl originalHttpUrl = original.url();
-                System.out.println("original url: " + originalHttpUrl.toString());
+                //System.out.println("original url: " + originalHttpUrl.toString());
 
                 HttpUrl url = originalHttpUrl.newBuilder()
                         .addQueryParameter(param, value)
