@@ -11,7 +11,7 @@ public class Examples {
         // change to your firebase reference url
         String FIREBASE_REF = "https://smartplayTest.firebaseio.com/";
 
-        // Create firebase reference with Full logging. Make sure you set to false in production
+        // Create firebase service with Full logging. Make sure you set to false in production
         FirebaseSvc fbSvc = new FirebaseSvc(FIREBASE_REF, true);
 
         // examples
