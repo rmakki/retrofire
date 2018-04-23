@@ -18,6 +18,10 @@ you wished if there is a java wrapper to firebase REST api using Retrofit and ok
 
 If you agree with 1 + 2 + 3 then Retrofire is for you!
 
+#Setup
+Beta release
+Maven and Gradle usage coming soon
+
 # Usage
 Retrieve or save data to Firebase with 3 easy steps
 
@@ -95,6 +99,7 @@ Retrieve or save data to Firebase with 3 easy steps
                     System.out.println("GET path not found");
                 }
             }
+
 
 # More
  For more samples check out Examples.java. Also check FirebaseSvc.java for a detailed description of every
