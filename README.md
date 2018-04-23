@@ -5,10 +5,10 @@ Supports GET, PUT, PATCH, POST and DELETE requests with query parameters
 # Prerequisites and why Retrofire
 
 1 - You don't want to use the firebase android/java api because perhaps you are operating in
-a server environment and you would rather execute synchronous requests, and don't want to cache any data or
+a server environment where you would rather execute synchronous requests, and don't want to cache any data or
 leave any socket connections open
 
-2 - You found out that firebase provides a REST api and you you decided you want to use it
+2 - You found out that firebase provides a REST api and you decided you want to use it
  https://firebase.google.com/docs/reference/rest/database/
 
  BUT!!!
@@ -19,7 +19,7 @@ you wished if there is a java wrapper to firebase REST api using Retrofit and ok
 If you agree with 1 + 2 + 3 then Retrofire is for you!
 
 # Setup
-Beta release - 
+Beta release -
 Maven and Gradle usage coming soon
 
 # Usage
