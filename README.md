@@ -2,7 +2,8 @@
 A thin Java wrapper to firebase REST api using Retrofit and Okhttp
 
 Supports GET, PUT, PATCH, POST and DELETE requests with Query parameters
-(Support for Headers and Streaming coming soon)
+
+Supports Dynamic Headers for GET requests (other requests coming soon)
 
 # Why Retrofire
 
