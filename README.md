@@ -1,5 +1,6 @@
 # Retrofire
 A thin Java wrapper to firebase REST api using Retrofit and Okhttp
+
 Supports GET, PUT, PATCH, POST and DELETE requests with Query parameters
 (Support for Headers and Streaming coming soon)
 
@@ -103,5 +104,6 @@ Retrieve or save data to Firebase with 3 easy steps
 
 
 # More
- For more samples check out Examples.java. Also check FirebaseSvc.java for a detailed description of every
+ For more samples check out [Examples.java](/src/test/java/Examples.java)
+ Also check [FirebaseSvc.java](/src/main/java/service/FirebaseSvc.java) for a detailed description of every
  method Retrofire provides
