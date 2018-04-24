@@ -26,6 +26,8 @@ public class FirebaseSvc {
     private FirebaseSvcApi firebaseSvcApiNoConverter;
     private OkHttpClient.Builder okHttpBuilder;
     private Map<String, String> queryParam;
+    private Map<String, String> headerParam;
+
     /**
      * Constructor
      *
@@ -39,7 +41,9 @@ public class FirebaseSvc {
         this.FIREBASE_REF = FIREBASE_REF;
 
         this.okHttpBuilder = new OkHttpClient.Builder();
+
         this.queryParam = new HashMap();
+        this.headerParam = new HashMap<>();
 
         if (httpFullLogging) {
             this.addHttpFullLogging();
@@ -83,7 +87,9 @@ public class FirebaseSvc {
         this.FIREBASE_REF = FIREBASE_REF;
 
         this.okHttpBuilder = new OkHttpClient.Builder();
+
         this.queryParam = new HashMap();
+        this.headerParam = new HashMap();
 
         // adds auth=<secureTokenValue> or access_token=<secureTokenValue> as query string parameters to all http requests
         this.okHttpBuilder = this.addQuery(okHttpBuilder, secureTokenParam, secureTokenValue);
@@ -449,11 +455,12 @@ public class FirebaseSvc {
 
         FirebaseResponse firebaseResponse;
 
-        Call<ResponseBody> call = this.firebaseSvcApi.get(path,this.queryParam);
+        Call<ResponseBody> call = this.firebaseSvcApi.get(path,this.queryParam, this.headerParam);
 
         Response<ResponseBody> response = call.execute();
 
         this.queryParam.clear();
+        this.headerParam.clear();
 
         firebaseResponse = processResponse(response);
 
@@ -522,6 +529,46 @@ public class FirebaseSvc {
         }
 
         this.queryParam.put(param, value);
+
+    }
+
+    /**
+     *  Add multiple Header parameters to an http Request by passing a MAP
+     *  Check out firebase documentation for possible REST header parameters
+     *  https://firebase.google.com/docs/reference/rest/database/
+     *
+     */
+
+    public void addHeaderParam(Map<String,String> map) {
+
+        if (this.headerParam == null) {
+            this.headerParam = new HashMap();
+        }
+        if (!this.headerParam.isEmpty()) {
+            for (Map.Entry<String, String> entry : headerParam.entrySet()) {
+                this.headerParam.put(entry.getKey(),entry.getValue());
+            }
+
+        } else {
+            this.headerParam = map;
+        }
+
+    }
+
+    /**
+     *  Add one Header parameter to an http Request
+     *  Check out firebase documentation for possible REST header parameters
+     *  https://firebase.google.com/docs/reference/rest/database/
+     *
+     */
+
+    public void addHeaderParam(String param, String value) {
+
+        if (this.headerParam == null) {
+            this.headerParam = new HashMap();
+        }
+
+        this.headerParam.put(param, value);
 
     }
 

@@ -44,7 +44,7 @@ public interface FirebaseSvcApi {
 	Call<ResponseBody> delete(@Path("path") String path, @QueryMap Map<String,String> queryMap);
 
 	@GET("/" + "{path}" + FB_REST_SVC_PATH)
-	Call<ResponseBody> get(@Path("path") String path, @QueryMap Map<String,String> queryMap);
+	Call<ResponseBody> get(@Path("path") String path, @QueryMap Map<String,String> queryMap, @HeaderMap Map<String,String> headerMap);
 
 	/**
 	 * I have attempted to make this library generic enough to serve most use cases, but you can easily
