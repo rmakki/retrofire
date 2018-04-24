@@ -1,20 +1,21 @@
 # Retrofire
 A thin Java wrapper to firebase REST api using Retrofit and Okhttp
-Supports GET, PUT, PATCH, POST and DELETE requests with query parameters
+Supports GET, PUT, PATCH, POST and DELETE requests with Query parameters
+(Support for Headers and Streaming coming soon)
 
-# Prerequisites and why Retrofire
+# Why Retrofire
 
-1 - You don't want to use the firebase android/java api because perhaps you are operating in
-a server environment where you would rather execute synchronous requests, and don't want to cache any data or
+1 - You don't want to use the Firebase android/java api because perhaps you are operating in
+an environment where you would rather execute synchronous requests, don't want to cache any data or
 leave any socket connections open
 
-2 - You found out that firebase provides a REST api and you decided you want to use it
+2 - You found out that Firebase provides a REST api and you decided you want to use it
  https://firebase.google.com/docs/reference/rest/database/
 
  BUT!!!
 
 3- You are allergic to boiler plate code and you are already using the awesome Retrofit and okhttp libraries and
-you wished if there is a java wrapper to firebase REST api using Retrofit and okhttp under the hood
+you wished if there is a java wrapper to this Firebase REST api using Retrofit and okhttp under the hood
 
 If you agree with 1 + 2 + 3 then Retrofire is for you!
 
@@ -59,7 +60,7 @@ Retrieve or save data to Firebase with 3 easy steps
 
             // Example 4
             // GET with query parameters
-            // Let's retrieve users with nb_followers equal or greater than 100
+            // Let's retrieve users with nb_followers equal or greater than 500
             fbSvc.addQueryParam("orderBy", "\"nb_followers\"");
             fbSvc.addQueryParam("startAt","500");
 

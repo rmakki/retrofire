@@ -92,7 +92,7 @@ public class Examples {
             }
 
             // GET with query parameters
-            // Let's retrieve users with nb_followers equal or greater than 100
+            // Let's retrieve users with nb_followers equal or greater than 500
             fbSvc.addQueryParam("orderBy", "\"nb_followers\"");
             fbSvc.addQueryParam("startAt","500");
             firebaseResponse = fbSvc.get("userDetails");
