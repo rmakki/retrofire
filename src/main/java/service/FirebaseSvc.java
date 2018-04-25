@@ -470,29 +470,6 @@ public class FirebaseSvc {
 
 
     /**
-     * GET using a POJO
-     * See Examples.java and FirebaseSvcApi.java for usage
-     *
-     */
-
-    public UserDetails getUserDetails(String path) throws Exception {
-
-        if (path == null) {
-            path = "";
-        }
-
-        Call<UserDetails> call = this.firebaseSvcApi.getUserDetails(path,this.queryParam);
-
-        UserDetails response = call.execute().body();
-
-        this.queryParam.clear();
-
-        return response;
-
-
-    }
-
-    /**
      *  Add a query string parameter in the form param=<value> to an http Request
      *  Check out firebase documentation for possible REST query parameters
      *  https://firebase.google.com/docs/reference/rest/database/

@@ -35,9 +35,9 @@ Retrieve or save data to Firebase with 3 easy steps
 
 2- Execute an http request by simply passing the path and your data in any of the below formats:
 
-                    1- Pass data as an object (could be a class you have defined or a data structure)
-                    2- Pass data as a MAP
-                    3- Pass data as a raw json
+                    a- Pass data as an object (could be a class you have defined or a data structure)
+                    b- Pass data as a MAP
+                    c- Pass data as a raw json
 
             // Example 1
             // PUT request passing path and a user defined object, in this case UserDetails class
@@ -71,7 +71,6 @@ Retrieve or save data to Firebase with 3 easy steps
             System.out.println("Users with at least 500 followers: " + firebaseResponse.toString());
             // Sample output
             // Users with at least 500 followers: FirebaseResponse{success=true, code=200, message=OK, body='{"uid2":{"bio":"Musician/Band","nb_followers":"4000","nb_following":"1000","nb_posts":"300","userUID":"uid2"}}'}
-
 
             // Example 5
             // POST

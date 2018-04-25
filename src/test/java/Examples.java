@@ -104,18 +104,6 @@ public class Examples {
             // Users with at least 500 followers: FirebaseResponse{success=true, code=200, message=OK, body='{"uid2":{"bio":"Musician/Band","nb_followers":"4000","nb_following":"1000","nb_posts":"300","userUID":"uid2"}}'}
 
 
-            // GET - customized call example with POJO
-            // You will have to modify FirebaseSvcApi and FirebaseSvc to match your use case
-            model.UserDetails userDetails = fbSvc.getUserDetails("userDetails/uid1/");
-            if (!(userDetails == null)) {
-                // Found info
-                System.out.print("Retrieving uid1 Bio directly : " + userDetails.getBio());
-            }
-            else {
-                // Did not find info(we passed a non existing path), firebase returned null
-                System.out.println("not found");
-            }
-
         }
 
         catch (IOException e) { // Network error (for example timeouts)
