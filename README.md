@@ -108,9 +108,9 @@ Retrieve or save data to Firebase with 3 easy steps
 
 # Authenticated requests
 
-You can add authentication to Retrofire requests by:
+You can add authentication to Retrofire requests by either:
 
-1- Pass the authentication parameters once to the Retrofire constructor and Retrofire will add
+1- Passing the authentication parameters once to the Retrofire constructor and Retrofire will add
  it to each http request you make:
 
         a- If you are using Firebase ID Tokens
@@ -119,9 +119,9 @@ You can add authentication to Retrofire requests by:
         b- If you are using Google OAuth2 access token
         FirebaseSvc fbSvc = new FirebaseSvc(FIREBASE_REF, "access_token", "<GoogleOAuth2Token>", false);
 
+OR
 
-
-2- Add the authentication parameters as a parameter to each Retrofire request
+2- Adding the authentication parameters as a parameter to each Retrofire request
 
         a- If you are using Firebase ID Tokens
         fbSvc.addQueryParam("auth","<FirebaseIDToken>");
