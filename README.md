@@ -37,11 +37,11 @@ Retrieve or save data to Firebase with 3 easy steps
 
                     1- Pass data as an object (could be a class you have defined or a data structure)
                     2- Pass data as a MAP
-                    3- Pass data as raw json
+                    3- Pass data as a raw json
 
             // Example 1
             // PUT request passing path and a user defined object, in this case UserDetails class
-            UserDetails user1 = new UserDetails("uid1",100,150,70, "I love travel and discovering new cultures");
+            UserDetails user1 = new UserDetails("uid1",100,150,70, "I love traveling and discovering new cultures");
 
             fbSvc.put("userDetails/uid1",user1);
 
@@ -69,12 +69,15 @@ Retrieve or save data to Firebase with 3 easy steps
             firebaseResponse = fbSvc.get("userDetails");
 
             System.out.println("Users with at least 500 followers: " + firebaseResponse.toString());
+            // Sample output
+            // Users with at least 500 followers: FirebaseResponse{success=true, code=200, message=OK, body='{"uid2":{"bio":"Musician/Band","nb_followers":"4000","nb_following":"1000","nb_posts":"300","userUID":"uid2"}}'}
+
 
             // Example 5
             // POST
             // User uid1 posts a photo, let's save the info
             datamap.clear();
-            datamap.put("description","Enjoying this beautiful sunset, where are you traveling next?");
+            datamap.put("description","Enjoying this beautiful sunset, where are you traveling to next?");
             datamap.put("imageLink","https://myclouddatastorage/image231");
 
             fbSvc.post("userPosts/uid1",datamap);
@@ -97,6 +100,7 @@ Retrieve or save data to Firebase with 3 easy steps
                     Gson gson = new Gson();
                     getUser = gson.fromJson(firebaseResponse.getBody(), UserDetails.class);
                     System.out.println("uid1 Bio : " + getUser.getBio());
+                    // Sample output: uid1 Bio : I love traveling and discovering new cultures
 
                 } else {
                     System.out.println("GET path not found");
@@ -105,6 +109,7 @@ Retrieve or save data to Firebase with 3 easy steps
 
 
 # More
- For more samples check out [Examples.java](/src/test/java/Examples.java)
- Also check [FirebaseSvc.java](/src/main/java/service/FirebaseSvc.java) for a detailed description of every
+ Check [FirebaseSvc.java](/src/main/java/service/FirebaseSvc.java) for a detailed description of every
  method Retrofire provides
+
+ Check [Examples.java](/src/test/java/Examples.java) for more detailed examples
