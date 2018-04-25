@@ -121,7 +121,7 @@ You can add authentication to Retrofire requests by either:
 
 OR
 
-2- Adding the authentication parameters as a parameter to each Retrofire request
+2- Adding the authentication parameters as a parameter to each Retrofire request you make:
 
         a- If you are using Firebase ID Tokens
         fbSvc.addQueryParam("auth","<FirebaseIDToken>");
