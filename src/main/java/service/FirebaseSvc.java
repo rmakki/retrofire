@@ -8,7 +8,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofitApi.FirebaseSvcApi;
-import model.UserDetails;
 
 import java.io.BufferedReader;
 import java.io.IOException;

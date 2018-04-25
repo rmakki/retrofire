@@ -1,6 +1,5 @@
 package retrofitApi;
 
-import model.UserDetails;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
