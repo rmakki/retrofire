@@ -4,36 +4,19 @@
 public class UserDetails {
 
     private String userUID;
-    private int nb_followers;
-    private int nb_following;
-    private int nb_posts;
+    private int nbFollowers;
+    private int nbFollowing;
+    private int nbPosts;
     private String bio;
 
     public UserDetails() {
     }
 
-    public UserDetails(String userUID, int nb_followers, int nb_following, int nb_posts, String bio) {
+    public UserDetails(String userUID, int nbFollowers, int nbFollowing, int nbPosts, String bio) {
         this.userUID = userUID;
-        this.nb_followers = nb_followers;
-        this.nb_following = nb_following;
-        this.nb_posts = nb_posts;
-        this.bio = bio;
-    }
-
-
-    public void setNb_followers(int nb_followers) {
-        this.nb_followers = nb_followers;
-    }
-
-    public void setNb_following(int nb_following) {
-        this.nb_following = nb_following;
-    }
-
-    public void setNb_posts(int nb_posts) {
-        this.nb_posts = nb_posts;
-    }
-
-    public void setBio(String bio) {
+        this.nbFollowers = nbFollowers;
+        this.nbFollowing = nbFollowing;
+        this.nbPosts = nbPosts;
         this.bio = bio;
     }
 
@@ -41,19 +24,40 @@ public class UserDetails {
         return userUID;
     }
 
-    public int getNb_followers() {
-        return nb_followers;
+    public void setUserUID(String userUID) {
+        this.userUID = userUID;
     }
 
-    public int getNb_following() {
-        return nb_following;
+    public int getNbFollowers() {
+        return nbFollowers;
     }
 
-    public int getNb_posts() {
-        return nb_posts;
+    public void setNbFollowers(int nbFollowers) {
+        this.nbFollowers = nbFollowers;
+    }
+
+    public int getNbFollowing() {
+        return nbFollowing;
+    }
+
+    public void setNbFollowing(int nbFollowing) {
+        this.nbFollowing = nbFollowing;
+    }
+
+    public int getNbPosts() {
+        return nbPosts;
+    }
+
+    public void setNbPosts(int nbPosts) {
+        this.nbPosts = nbPosts;
     }
 
     public String getBio() {
         return bio;
     }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
 }

@@ -33,7 +33,7 @@ public class Examples {
 
             // PUT request passing raw json data
             // let's add another user
-            String rawjson = "{\"userUID\":\"uid2\",\"nb_followers\":\"4000\",\"nb_following\":\"1000\",\"nb_posts\":\"300\"}";
+            String rawjson = "{\"userUID\":\"uid2\",\"nbFollowers\":\"4000\",\"nbFollowing\":\"1000\",\"nbPosts\":\"300\"}";
             fbSvc.put("userDetails/uid2",rawjson);
 
             // PATCH request passing a MAP
@@ -96,12 +96,12 @@ public class Examples {
 
             // GET with query parameters
             // Let's retrieve users with nb_followers equal or greater than 500
-            fbSvc.addQueryParam("orderBy", "\"nb_followers\"");
+            fbSvc.addQueryParam("orderBy", "\"nbFollowers\"");
             fbSvc.addQueryParam("startAt","500");
             firebaseResponse = fbSvc.get("userDetails");
             System.out.println("Users with at least 500 followers: " + firebaseResponse.toString());
             // Sample output
-            // Users with at least 500 followers: FirebaseResponse{success=true, code=200, message=OK, body='{"uid2":{"bio":"Musician/Band","nb_followers":"4000","nb_following":"1000","nb_posts":"300","userUID":"uid2"}}'}
+            // Users with at least 500 followers: FirebaseResponse{success=true, code=200, message=OK, body='{"uid2":{"bio":"Musician/Band","nbFollowers":"4000","nbFollowing":"1000","nbPosts":"300","userUID":"uid2"}}'}
 
 
         }
