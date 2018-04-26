@@ -1,23 +1,36 @@
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by raniamakki on 3/27/18.
  */
 public class UserDetails {
 
+    @SerializedName("userUID")
     private String userUID;
+
+    @SerializedName("nbFollowers")
     private int nbFollowers;
+
+    @SerializedName("nbFollowing")
     private int nbFollowing;
+
+    @SerializedName("nbPosts")
     private int nbPosts;
+
+    @SerializedName("bio")
     private String bio;
 
     public UserDetails() {
     }
 
     public UserDetails(String userUID, int nbFollowers, int nbFollowing, int nbPosts, String bio) {
+
         this.userUID = userUID;
         this.nbFollowers = nbFollowers;
         this.nbFollowing = nbFollowing;
         this.nbPosts = nbPosts;
         this.bio = bio;
+
     }
 
     public String getUserUID() {
