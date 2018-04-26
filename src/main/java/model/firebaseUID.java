@@ -1,5 +1,7 @@
 package model;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by raniamakki on 3/31/18.
  */
@@ -9,6 +11,7 @@ package model;
 
 public class FirebaseUID {
 
+    @SerializedName("name")
     private String name;
 
     public FirebaseUID() {
