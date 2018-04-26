@@ -1,5 +1,5 @@
 # Retrofire
-A thin Java wrapper to firebase REST api using Retrofit and Okhttp
+A thin Java wrapper to firebase REST api using Retrofit and Okhttp under the hood
 
 Supports GET, PUT, PATCH, POST and DELETE requests with Query parameters
 
@@ -16,8 +16,8 @@ leave any socket connections open
 
  BUT!!!
 
-3- You are allergic to boiler plate code and you are already using the awesome Retrofit and okhttp libraries and
-you wished if there is a java wrapper to this Firebase REST api using Retrofit and okhttp under the hood
+3- You are allergic to boiler plate code and you wished if there is a java wrapper to the above Firebase REST api using Retrofit and okhttp under the hood
+that makes your Http calls easier to write, read, and debug
 
 If you agree with 1 + 2 + 3 then Retrofire is for you!
 
