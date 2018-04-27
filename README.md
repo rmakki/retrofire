@@ -7,17 +7,17 @@ Supports Dynamic Headers for GET requests (other requests coming soon)
 
 # Why Retrofire
 
-1 - You don't want to use the Firebase android/java api because perhaps you are operating in
-an environment where you would rather execute synchronous requests, don't want to cache any data or
-leave any socket connections open
+1 - You have evaluated the Firebase java admin sdk and decided that your project may not be the right candidate for it:
+perhaps you are operating in a server environment where you can't or you would rather not leave any persistent socket connections open.
+
 
 2 - You found out that Firebase provides a REST api and you decided you want to use it
  https://firebase.google.com/docs/reference/rest/database/
 
  BUT!!!
 
-3- You are allergic to boiler plate code and you wished if there is a java wrapper to the above Firebase REST api
-that makes your Http calls easier to write, read, and debug
+3- You are allergic to boiler plate code and you wished if there is a java wrapper to the
+above Firebase REST api that makes your Http calls easier to write, read, and debug
 
 If you agree with 1 + 2 + 3 then Retrofire is for you!
 
