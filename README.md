@@ -31,7 +31,7 @@ Retrieve or save data to Firebase with 3 easy steps
 1- Create an instance of the Retrofire/Firebase service
 
         String FIREBASE_REF = "https://yourFirebaseReference.firebaseio.com/";
-        FirebaseSvc fbSvc = new FirebaseSvc(FIREBASE_REF, false);
+        RetrofireSvc rfSvc = new RetrofireSvc(FIREBASE_REF, false);
 
 2- Execute an http request by simply passing the path and your data in any of the below formats:
 
@@ -43,14 +43,14 @@ Retrieve or save data to Firebase with 3 easy steps
             // PUT request passing path and a user defined object, in this case UserDetails class
             UserDetails user1 = new UserDetails("uid1",100,150,70, "I love traveling and discovering new cultures");
 
-            fbSvc.put("userDetails/uid1",user1);
+            rfSvc.put("userDetails/uid1",user1);
 
             // Example 2
             // PUT request passing raw json
             // let's add another user
             String rawjson = "{\"userUID\":\"uid2\",\"nbFollowers\":\"4000\",\"nbFollowing\":\"1000\",\"nbPosts\":\"300\"}";
 
-            fbSvc.put("userDetails/uid2",rawjson);
+            rfSvc.put("userDetails/uid2",rawjson);
 
             // Example 3
             // PATCH request passing a MAP
@@ -58,15 +58,15 @@ Retrieve or save data to Firebase with 3 easy steps
             LinkedHashMap<String, Object> datamap = new LinkedHashMap<String, Object>();
             datamap.put("bio", "Musician/Band");
 
-            fbSvc.patch("userDetails/uid2",datamap);
+            rfSvc.patch("userDetails/uid2",datamap);
 
             // Example 4
             // GET with query parameters
             // Let's retrieve users with nb_followers equal or greater than 500
-            fbSvc.addQueryParam("orderBy", "\"nbFollowers\"");
-            fbSvc.addQueryParam("startAt","500");
+            rfSvc.addQueryParam("orderBy", "\"nbFollowers\"");
+            rfSvc.addQueryParam("startAt","500");
 
-            firebaseResponse = fbSvc.get("userDetails");
+            firebaseResponse = rfSvc.get("userDetails");
 
             System.out.println("Users with at least 500 followers: " + firebaseResponse.toString());
             // Sample output
@@ -79,7 +79,7 @@ Retrieve or save data to Firebase with 3 easy steps
             datamap.put("description","Enjoying this beautiful sunset, where are you traveling to next?");
             datamap.put("imageLink","https://myclouddatastorage/image231");
 
-            fbSvc.post("userPosts/uid1",datamap);
+            rfSvc.post("userPosts/uid1",datamap);
 
 
 3- Retrieve the Firebase response
@@ -91,7 +91,7 @@ Retrieve or save data to Firebase with 3 easy steps
             // GET
             // Let's retrieve the bio of uid1
             UserDetails getUser;
-            firebaseResponse = fbSvc.get("userDetails/uid1/");
+            firebaseResponse = rfSvc.get("userDetails/uid1/");
 
             if (firebaseResponse.isSuccess()) {
                 // Check if information found (firebase returns success status with null body if path not found)
@@ -114,26 +114,26 @@ You can add authentication to Retrofire requests by either:
  it to each http request you make:
 
         a- If you are using Firebase ID Tokens
-        FirebaseSvc fbSvc = new FirebaseSvc(FIREBASE_REF, "auth", "<FirebaseIDToken>", false);
+        RetrofireSvc rfSvc = new RetrofireSvc(FIREBASE_REF, "auth", "<FirebaseIDToken>", false);
 
         b- If you are using Google OAuth2 access token
-        FirebaseSvc fbSvc = new FirebaseSvc(FIREBASE_REF, "access_token", "<GoogleOAuth2Token>", false);
+        RetrofireSvc rfSvc = new RetrofireSvc(FIREBASE_REF, "access_token", "<GoogleOAuth2Token>", false);
 
 OR
 
 2- Adding the authentication parameters as a parameter to each Retrofire request you make:
 
         a- If you are using Firebase ID Tokens
-        fbSvc.addQueryParam("auth","<FirebaseIDToken>");
+        rfSvc.addQueryParam("auth","<FirebaseIDToken>");
 
         b- If you are using Google OAuth2 access Tokens
-        fbSvc.addQueryParam("access_token","<GoogleOAuth2Token>");
+        rfSvc.addQueryParam("access_token","<GoogleOAuth2Token>");
 
 For more information about Firebase REST authenticated requests and how to generate tokens check out
 https://firebase.google.com/docs/database/rest/auth
 
 # More
- Check [FirebaseSvc.java](/src/main/java/service/FirebaseSvc.java) for a detailed description of every
+ Check [RetrofireSvcApi.java](/src/main/java/service/RetrofireSvcApi.java) for a detailed description of every
  method Retrofire provides
 
  Check [Examples.java](/src/test/java/Examples.java) for more detailed examples

@@ -1,6 +1,6 @@
 import com.google.gson.Gson;
 import model.*;
-import service.FirebaseSvc;
+import service.RetrofireSvc;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 
@@ -12,14 +12,14 @@ public class Examples {
         String FIREBASE_REF = "https://smartplayTest.firebaseio.com/";
 
         // Create firebase service with Full logging. Make sure you set to false in production
-        FirebaseSvc fbSvc = new FirebaseSvc(FIREBASE_REF, true);
+        RetrofireSvc rfSvc = new RetrofireSvc(FIREBASE_REF, true);
 
         // examples
 
         try {
             // Delete
             // The example below Deletes the root (clears data from previous tests)
-            fbSvc.delete("");
+            rfSvc.delete("");
 
             // There are three ways you can pass data to PUT POST and PATCH requests:
             // 1- pass the path and an object (could be a class you have defined or a data structure)
@@ -29,18 +29,18 @@ public class Examples {
             // PUT request passing path and an object
             // Object to be passed
             UserDetails user1 = new UserDetails("uid1",100,150,70, "I love traveling and discovering new cultures");
-            fbSvc.put("userDetails/uid1",user1);
+            rfSvc.put("userDetails/uid1",user1);
 
             // PUT request passing raw json data
             // let's add another user
             String rawjson = "{\"userUID\":\"uid2\",\"nbFollowers\":\"4000\",\"nbFollowing\":\"1000\",\"nbPosts\":\"300\"}";
-            fbSvc.put("userDetails/uid2",rawjson);
+            rfSvc.put("userDetails/uid2",rawjson);
 
             // PATCH request passing a MAP
             // Let's add bio information to the user we just added (uid2)
             LinkedHashMap<String, Object> datamap = new LinkedHashMap<String, Object>();
             datamap.put("bio", "Musician/Band");
-            fbSvc.patch("userDetails/uid2",datamap);
+            rfSvc.patch("userDetails/uid2",datamap);
 
 
             // POST
@@ -49,7 +49,7 @@ public class Examples {
             datamap.put("description","Enjoying this beautiful sunset, where are you traveling next?");
             datamap.put("imageLink","https://myclouddatastorage/image231");
 
-            FirebaseResponse firebaseResponse = fbSvc.post("userPosts/uid1",datamap);
+            FirebaseResponse firebaseResponse = rfSvc.post("userPosts/uid1",datamap);
 
             // Firebase generates a unique ID for each post request and returns it in the response
             // Below is a sample code in case you need to retrieve this unique ID from the FirebaseResponse
@@ -68,17 +68,17 @@ public class Examples {
             // someone comments on the photo, let's save the comment under the node we just generated above
             datamap.clear();
             datamap.put("comment","Amazing shot!");
-            fbSvc.post("userPosts/uid1/" + newPostUID.getName() + "/comments",datamap);
+            rfSvc.post("userPosts/uid1/" + newPostUID.getName() + "/comments",datamap);
 
 
             // GET
             // Passing an empty string will retrieve all info under your firebase Root
-            fbSvc.get("");
+            rfSvc.get("");
 
             // GET
             // Let's retrieve the bio of uid1
             UserDetails getUser;
-            firebaseResponse = fbSvc.get("userDetails/uid1/");
+            firebaseResponse = rfSvc.get("userDetails/uid1/");
 
             if (firebaseResponse.isSuccess()) {
                 // Check if information found (firebase returns success with null body if path not found)
@@ -96,9 +96,9 @@ public class Examples {
 
             // GET with query parameters
             // Let's retrieve users with nb_followers equal or greater than 500
-            fbSvc.addQueryParam("orderBy", "\"nbFollowers\"");
-            fbSvc.addQueryParam("startAt","500");
-            firebaseResponse = fbSvc.get("userDetails");
+            rfSvc.addQueryParam("orderBy", "\"nbFollowers\"");
+            rfSvc.addQueryParam("startAt","500");
+            firebaseResponse = rfSvc.get("userDetails");
             System.out.println("Users with at least 500 followers: " + firebaseResponse.toString());
             // Sample output
             // Users with at least 500 followers: FirebaseResponse{success=true, code=200, message=OK, body='{"uid2":{"bio":"Musician/Band","nbFollowers":"4000","nbFollowing":"1000","nbPosts":"300","userUID":"uid2"}}'}

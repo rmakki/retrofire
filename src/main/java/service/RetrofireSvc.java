@@ -18,7 +18,7 @@ import java.util.Map;
 /**
  * Created by raniamakki on 9/15/17.
  */
-public class FirebaseSvc implements RetrofireSvcApi {
+public class RetrofireSvc implements RetrofireSvcApi {
 
     private String FIREBASE_REF;
     private FirebaseSvcApi firebaseSvcApi;
@@ -35,7 +35,7 @@ public class FirebaseSvc implements RetrofireSvcApi {
      *                        you pass false in production code
      */
 
-    public FirebaseSvc(String FIREBASE_REF, boolean httpFullLogging) {
+    public RetrofireSvc(String FIREBASE_REF, boolean httpFullLogging) {
 
         this.FIREBASE_REF = FIREBASE_REF;
 
@@ -80,7 +80,7 @@ public class FirebaseSvc implements RetrofireSvcApi {
      *
      */
 
-    public FirebaseSvc(String FIREBASE_REF, String secureTokenParam, String secureTokenValue, boolean httpFullLogging) {
+    public RetrofireSvc(String FIREBASE_REF, String secureTokenParam, String secureTokenValue, boolean httpFullLogging) {
 
 
         this.FIREBASE_REF = FIREBASE_REF;
