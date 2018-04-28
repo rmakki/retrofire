@@ -18,7 +18,7 @@ import java.util.Map;
 /**
  * Created by raniamakki on 9/15/17.
  */
-public class FirebaseSvc {
+public class FirebaseSvc implements RetrofireSvcApi {
 
     private String FIREBASE_REF;
     private FirebaseSvcApi firebaseSvcApi;

@@ -7,7 +7,7 @@ public class FirebaseResponse {
 
     private final int code; // code returned by Firebase
     private final String message; // message returned by Firebase
-    private boolean success; // True if Http request successfully completed
+    private boolean success; // True if Http request successfully complete
     private String body; // Will either contain data or null or error details sent back from Firebase
 
 
