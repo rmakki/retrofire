@@ -104,6 +104,30 @@ public class Examples {
             // Users with at least 500 followers: FirebaseResponse{success=true, code=200, message=OK, body='{"uid2":{"bio":"Musician/Band","nbFollowers":"4000","nbFollowing":"1000","nbPosts":"300","userUID":"uid2"}}'}
 
 
+            // Asynchronous GET method call
+
+            NetworkRequestListener networkRequestListener = new NetworkRequestListener<FirebaseResponse>() {
+                @Override
+                public void onExecuted(FirebaseResponse firebaseResponse) {
+
+                    // Request Executed
+                    if (firebaseResponse.isSuccess()) {
+                        System.out.println("Users with at least 500 followers ASYNC: " + firebaseResponse.toString());
+                    } else
+                        System.out.print("Firebase returned an error ASYNC: " + firebaseResponse.getMessage());
+
+                }
+
+                @Override
+                public void onFailure(Throwable t) {
+                    // Network request failed
+                    System.out.print("Retrofit ASYNC network call failed " + t.getMessage());
+                }
+
+            };
+
+            rfSvc.getAsync("userDetails", networkRequestListener);
+
         }
 
         catch (IOException e) { // Network error (for example timeouts)

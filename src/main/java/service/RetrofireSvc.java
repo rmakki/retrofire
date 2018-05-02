@@ -1,6 +1,7 @@
 package service;
 
 import model.FirebaseResponse;
+import model.NetworkRequestListener;
 import okhttp3.*;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -467,6 +468,54 @@ public class RetrofireSvc implements RetrofireSvcApi {
 
     }
 
+    /**
+     *
+     * Asynchronous GET data from the path relative to the baseURL
+     *
+     * @param path if empty/null, all data under your root will be fetched
+     * @param listener NetworkRequestListener
+     *
+     */
+
+    public void getAsync(String path, final NetworkRequestListener listener) throws Exception {
+
+        if (path == null) {
+            path = "";
+        }
+
+        Call<ResponseBody> call = this.firebaseSvcApi.get(path,this.queryParam, this.headerParam);
+
+
+        call.enqueue(new retrofit2.Callback<okhttp3.ResponseBody>() {
+            @Override
+            public void onResponse(retrofit2.Call<okhttp3.ResponseBody> call, retrofit2.Response<okhttp3.ResponseBody> response){
+
+                FirebaseResponse firebaseResponse = processResponse(response);
+
+                queryParam.clear();
+                headerParam.clear();
+
+                if (listener != null) {
+                    listener.onExecuted(firebaseResponse);
+                }
+
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<okhttp3.ResponseBody> call, Throwable t) {
+
+                queryParam.clear();
+                headerParam.clear();
+
+                if (listener != null) {
+                    listener.onFailure(t);
+                }
+
+            }
+        });
+
+
+    }
 
     /**
      *  Add a query string parameter in the form param=<value> to an http Request
