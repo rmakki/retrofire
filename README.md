@@ -5,6 +5,8 @@ Supports GET, PUT, PATCH, POST and DELETE requests with Query parameters
 
 Supports Dynamic Headers for GET requests (other requests coming soon)
 
+Supports Asynchronous GET requests with Query parameters and dynamic headers
+
 # Why Retrofire
 
 1 - You have evaluated the Firebase java admin sdk and decided that your project may not be the right candidate for it:
@@ -105,6 +107,36 @@ Retrieve or save data to Firebase with 3 easy steps
                     System.out.println("GET path not found");
                 }
             }
+
+# Asynchronous Requests
+
+Retrofire provides asynchronous calls to Firebase. These calls are more efficient than the blocking synchronous version since
+they use okhttp/retrofit asynchronous calls under the hood
+
+            // Asynchronous GET method call
+
+            NetworkRequestListener networkRequestListener = new NetworkRequestListener<FirebaseResponse>() {
+                @Override
+                public void onExecuted(FirebaseResponse firebaseResponse) {
+
+                    // Request Executed
+                    if (firebaseResponse.isSuccess()) {
+                        System.out.println("Users with at least 500 followers ASYNC: " + firebaseResponse.toString());
+                    } else
+                        System.out.print("Firebase returned an error ASYNC: " + firebaseResponse.getMessage());
+
+                }
+
+                @Override
+                public void onFailure(Throwable t) {
+                    // Network request failed
+                    System.out.print("Retrofit ASYNC network call failed " + t.getMessage());
+                }
+
+            };
+
+            rfSvc.getAsync("userDetails", networkRequestListener);
+
 
 # Authenticated requests
 
