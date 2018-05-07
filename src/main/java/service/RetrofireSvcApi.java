@@ -1,6 +1,7 @@
 package service;
 
 import model.FirebaseResponse;
+import model.NetworkRequestListener;
 import okhttp3.*;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -22,9 +23,9 @@ public interface RetrofireSvcApi {
 
 
     /**
-     * PATCH data on the path relative to the baseURL
+     * PATCH data on the path relative to the baseURL (Update) - Synchronous
      *
-     * Firebase will only update the fields passed.
+     * Firebase will only update the fields passed
      * If the fields passed do not exist, they will be added to firebase
      *
      * @param path if empty/null, data will be updated under the root of the baseURL
@@ -39,7 +40,7 @@ public interface RetrofireSvcApi {
     public FirebaseResponse patch(String path, Object data) throws Exception;
 
     /**
-     * PATCH data on the path relative to the baseURL - Update
+     * PATCH data on the path relative to the baseURL (Update) - Synchronous
      *
      * Named children in the data being written with PATCH are overwritten,
      * but omitted children are not deleted.
@@ -58,7 +59,7 @@ public interface RetrofireSvcApi {
 
 
     /**
-     * PATCH RAW json data relative to the baseURL
+     * PATCH RAW json data relative to the baseURL (Update) - Synchronous
      * <p>
      * Firebase will only update the fields passed.
      * If the fields passed do not exist, they will be added to firebase
@@ -75,7 +76,7 @@ public interface RetrofireSvcApi {
     public FirebaseResponse patch(String path, String rawdata) throws Exception;
 
     /**
-     * POST data relative to the baseURL
+     * POST data relative to the baseURL (Insert) - Synchronous
      * <p>
      * Firebase will insert data under the baseURL but associated with a new Firebase
      * generated key
@@ -98,7 +99,7 @@ public interface RetrofireSvcApi {
 
 
     /**
-     * POST data relative to the baseURL
+     * POST data relative to the baseURL (Insert) - Synchronous
      * <p>
      * Firebase will insert data under the baseURL but associated with a new Firebase
      * generated key
@@ -123,7 +124,7 @@ public interface RetrofireSvcApi {
     public FirebaseResponse post(String path, Map<String, Object> data) throws Exception;
 
     /**
-     * POST RAW json data relative to the baseURL
+     * POST RAW json data relative to the baseURL (Insert) - Synchronous
      * <p>
      * Firebase will insert data under the baseURL but associated with a new Firebase
      * generated key
@@ -140,7 +141,7 @@ public interface RetrofireSvcApi {
     public FirebaseResponse post(String path, String rawdata) throws Exception;
 
     /**
-     * PUT data on the path relative to the baseURL : create or delete
+     * PUT data on the path relative to the baseURL : create or delete - Synchronous
      * <p>
      * If there is existing data at the path, the data you pass will overwrite it
      * If you pass empty data, any data existing at the path will be deleted
@@ -160,7 +161,7 @@ public interface RetrofireSvcApi {
 
 
     /**
-     * PUT data on the path relative to the baseURL : create or delete
+     * PUT data on the path relative to the baseURL : create or delete - Synchronous
      * <p>
      * If there is existing data at the path, the data you pass will overwrite it
      * If you pass empty data, any data existing at the path will be deleted
@@ -180,7 +181,7 @@ public interface RetrofireSvcApi {
     public FirebaseResponse put(String path, Map<String, Object> data) throws Exception;
 
     /**
-     * PUT raw json data on the path relative to the baseURL : create or delete
+     * PUT raw json data on the path relative to the baseURL : create or delete - Synchronous
      * <p>
      * If there is existing data at the path, the data you pass will overwrite it
      * If you pass empty data, any data existing at the path will be deleted
@@ -201,7 +202,7 @@ public interface RetrofireSvcApi {
 
 
     /**
-     * DELETE data on the path relative to the baseURL
+     * DELETE data on the path relative to the baseURL - Synchronous
      *
      * @param path if empty/null, data will be deleted under the root of the baseURL
      *             Be careful with this as this can clear all the data under your root
@@ -211,13 +212,26 @@ public interface RetrofireSvcApi {
     public FirebaseResponse delete(String path) throws Exception;
 
     /**
-     * GET data from the path relative to the baseURL
+     * GET data from the path relative to the baseURL - Synchronous
      *
      * @param path if empty/null, all data under your root will be fetched
      * @return {@link FirebaseResponse}
      */
 
     public FirebaseResponse get(String path) throws Exception;
+
+
+    /**
+     *
+     * GET data from the path relative to the baseURL - Asynchronous
+     *
+     * @param path if empty/null, all data under your root will be fetched
+     * @param listener NetworkRequestListener
+     *
+     */
+
+    public void getAsync(String path, final NetworkRequestListener listener) throws Exception;
+
 
     /**
      *  Add a query string parameter in the form param=<value> to an http Request
