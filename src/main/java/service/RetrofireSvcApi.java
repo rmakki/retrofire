@@ -226,7 +226,9 @@ public interface RetrofireSvcApi {
      * GET data from the path relative to the baseURL - Asynchronous
      *
      * @param path if empty/null, all data under your root will be fetched
-     * @param listener NetworkRequestListener
+     * @param listener NetworkRequestListener: Overwrite the onExecuted and onFailure
+     *                 methods to have access to the asynchronous response.
+     *                 See Examples.java for more details
      *
      */
 

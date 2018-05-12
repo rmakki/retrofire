@@ -112,7 +112,7 @@ public class Examples {
 
                     // Request Executed
                     if (firebaseResponse.isSuccess()) {
-                        System.out.println("Users with at least 500 followers ASYNC: " + firebaseResponse.toString());
+                        System.out.println("ASYNC call success: " + firebaseResponse.toString());
                     } else
                         System.out.print("Firebase returned an error ASYNC: " + firebaseResponse.getMessage());
 
@@ -127,6 +127,10 @@ public class Examples {
             };
 
             rfSvc.getAsync("userDetails", networkRequestListener);
+
+            // Deletes all users async
+            // rfSvc.deleteAsync("userDetails", networkRequestListener);
+
 
         }
 
