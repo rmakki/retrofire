@@ -223,6 +223,20 @@ public interface RetrofireSvcApi {
 
     /**
      *
+     * DELETE data on the path relative to the baseURL
+     *
+     * @param path if empty/null, data will be deleted under the root of the baseURL
+     *             Be careful with this as this can clear all the data under your root
+     * @param listener NetworkRequestListener: Overwrite the onExecuted and onFailure
+     *                 methods to have access to the asynchronous response.
+     *                 See Examples.java for more details
+     *
+     */
+
+    public void deleteAsync(String path, final NetworkRequestListener listener) throws Exception;
+
+    /**
+     *
      * GET data from the path relative to the baseURL - Asynchronous
      *
      * @param path if empty/null, all data under your root will be fetched
