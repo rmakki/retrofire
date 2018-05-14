@@ -461,35 +461,7 @@ public class RetrofireSvc implements RetrofireSvcApi {
 
         Call<ResponseBody> call = this.firebaseSvcApi.delete(path,this.queryParam);
 
-
-        call.enqueue(new retrofit2.Callback<okhttp3.ResponseBody>() {
-            @Override
-            public void onResponse(retrofit2.Call<okhttp3.ResponseBody> call, retrofit2.Response<okhttp3.ResponseBody> response){
-
-                FirebaseResponse firebaseResponse = processResponse(response);
-
-                queryParam.clear();
-                headerParam.clear();
-
-                if (listener != null) {
-                    listener.onExecuted(firebaseResponse);
-                }
-
-            }
-
-            @Override
-            public void onFailure(retrofit2.Call<okhttp3.ResponseBody> call, Throwable t) {
-
-                queryParam.clear();
-                headerParam.clear();
-
-                if (listener != null) {
-                    listener.onFailure(t);
-                }
-
-            }
-        });
-
+        call.enqueue(new CallbackListener(listener));
 
     }
 
@@ -542,35 +514,7 @@ public class RetrofireSvc implements RetrofireSvcApi {
 
         Call<ResponseBody> call = this.firebaseSvcApi.get(path,this.queryParam, this.headerParam);
 
-
-        call.enqueue(new retrofit2.Callback<okhttp3.ResponseBody>() {
-            @Override
-            public void onResponse(retrofit2.Call<okhttp3.ResponseBody> call, retrofit2.Response<okhttp3.ResponseBody> response){
-
-                FirebaseResponse firebaseResponse = processResponse(response);
-
-                queryParam.clear();
-                headerParam.clear();
-
-                if (listener != null) {
-                    listener.onExecuted(firebaseResponse);
-                }
-
-            }
-
-            @Override
-            public void onFailure(retrofit2.Call<okhttp3.ResponseBody> call, Throwable t) {
-
-                queryParam.clear();
-                headerParam.clear();
-
-                if (listener != null) {
-                    listener.onFailure(t);
-                }
-
-            }
-        });
-
+        call.enqueue(new CallbackListener(listener));
 
     }
 
@@ -651,6 +595,51 @@ public class RetrofireSvc implements RetrofireSvcApi {
         }
 
         this.headerParam.put(param, value);
+
+    }
+
+    /**
+     *  Private Helper Class
+     *  Handles Retrofit's Asynchronous Responses
+     *
+     *
+     */
+
+    private class CallbackListener implements retrofit2.Callback<okhttp3.ResponseBody> {
+
+        private NetworkRequestListener listener;
+
+        public CallbackListener (NetworkRequestListener listener) {
+
+            this.listener = listener;
+        }
+
+
+        @Override
+        public void onResponse(retrofit2.Call<okhttp3.ResponseBody> call, retrofit2.Response<okhttp3.ResponseBody> response){
+
+            FirebaseResponse firebaseResponse = processResponse(response);
+
+            queryParam.clear();
+            headerParam.clear();
+
+            if (listener != null) {
+                listener.onExecuted(firebaseResponse);
+            }
+
+        }
+
+        @Override
+        public void onFailure(retrofit2.Call<okhttp3.ResponseBody> call, Throwable t) {
+
+            queryParam.clear();
+            headerParam.clear();
+
+            if (listener != null) {
+                listener.onFailure(t);
+            }
+
+        }
 
     }
 
@@ -803,5 +792,8 @@ public class RetrofireSvc implements RetrofireSvcApi {
         this.okHttpBuilder.addInterceptor(loggingInterceptor);
 
     }
+
+
+
 
 }
