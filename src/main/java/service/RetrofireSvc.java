@@ -311,7 +311,7 @@ public class RetrofireSvc implements RetrofireSvcApi {
 
 
     /**
-     * PUT data on the path relative to the baseURL : create or delete
+     * PUT data on the path relative to the baseURL : create or delete - Synchronous
      * <p>
      * If there is existing data at the path, the data you pass will overwrite it
      * If you pass empty data, any data existing at the path will be deleted
@@ -348,7 +348,7 @@ public class RetrofireSvc implements RetrofireSvcApi {
     }
 
     /**
-     * PUT data on the path relative to the baseURL : create or delete
+     * PUT data on the path relative to the baseURL : create or delete - Synchronous
      * <p>
      * If there is existing data at the path, the data you pass will overwrite it
      * If you pass empty data, any data existing at the path will be deleted
@@ -372,7 +372,7 @@ public class RetrofireSvc implements RetrofireSvcApi {
     }
 
     /**
-     * PUT raw json data on the path relative to the baseURL : create or delete
+     * PUT raw json data on the path relative to the baseURL : create or delete - Synchronous
      * <p>
      * If there is existing data at the path, the data you pass will overwrite it
      * If you pass empty data, any data existing at the path will be deleted
@@ -413,7 +413,101 @@ public class RetrofireSvc implements RetrofireSvcApi {
 
 
     /**
-     * DELETE data on the path relative to the baseURL
+     * PUT data on the path relative to the baseURL : create or delete - Asynchronous
+     * <p>
+     * If there is existing data at the path, the data you pass will overwrite it
+     * If you pass empty data, any data existing at the path will be deleted
+     * If the fields passed do not exist, they will be added to firebase
+     *
+     * @param path if empty/null, data will be overwritten/created under the root of the baseURL
+     *             Be careful with this as this can clear all the data under your root and
+     *             replace it with the object you are passing
+     *             if not null, data will be overwritten/created relative to the baseURL
+     * @param data if null object Firebase will return a success
+     *             but the call will not change the state of your firebase instance
+     *             if empty object, data of the fields sent will be cleared relative to the baseURL
+     * @param listener NetworkRequestListener: Overwrite the onExecuted and onFailure
+     *                 methods to have access to the asynchronous response.
+     *                 See Examples.java or Readme for more details
+     */
+
+    public void putAsync(String path, Object data, NetworkRequestListener listener) throws Exception {
+
+        if (path == null) {
+            path = "";
+        }
+
+        Call<ResponseBody> call = this.firebaseSvcApi.put(path, data, this.queryParam);
+
+        call.enqueue(new CallbackListener(listener));
+
+    }
+
+    /**
+     * PUT data on the path relative to the baseURL : create or delete - Asynchronous
+     * <p>
+     * If there is existing data at the path, the data you pass will overwrite it
+     * If you pass empty data, any data existing at the path will be deleted
+     * If the fields passed do not exist, they will be added to firebase
+     *
+     * @param path if empty/null, data will be overwritten/created under the root of the baseURL
+     *             Be careful with this as this can clear all the data under your root and
+     *             replace it with the object you are passing
+     *             if not null, data will be overwritten/created relative to the baseURL
+     * @param data if null object Firebase will return a success
+     *             but the call will not change the state of your firebase instance
+     *             if empty object, data of the fields sent will be cleared relative to the baseURL
+     * @param listener NetworkRequestListener: Overwrite the onExecuted and onFailure
+     *                 methods to have access to the asynchronous response.
+     *                 See Examples.java or Readme for more details
+     */
+
+
+    public void putAsync(String path, Map<String, Object> data, NetworkRequestListener listener) throws Exception {
+
+        this.putAsync(path, (Object) data, listener);
+
+    }
+
+    /**
+     * PUT raw json data on the path relative to the baseURL : create or delete - Asynchronous
+     * <p>
+     * If there is existing data at the path, the data you pass will overwrite it
+     * If you pass empty data, any data existing at the path will be deleted
+     * If the fields passed do not exist, they will be added to firebase
+     *
+     * @param path    if empty/null, data will be overwritten/created under the root of the baseURL
+     *                Be careful with this as this can clear all the data under your root and
+     *                replace it with the object you are passing
+     *                if not null, data will be overwritten/created relative to the baseURL
+     * @param rawdata if null Retrofit will throw a IllegalArgumentException: Body parameter value must not be null
+     *                exception.
+     *                if you pass an empty String okhttp3 will throw a java.lang.NullPointerException
+     *                with Info "No data supplied."
+     *
+     * @param listener NetworkRequestListener: Overwrite the onExecuted and onFailure
+     *                 methods to have access to the asynchronous response.
+     *                 See Examples.java or Readme for more details
+     */
+
+    public void putAsync(String path, String rawdata, NetworkRequestListener listener) throws Exception {
+
+        if (path == null) {
+            path = "";
+        }
+
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), rawdata);
+
+        Call<ResponseBody> call = this.firebaseSvcApiNoConverter.put(path, body, this.queryParam);
+
+        call.enqueue(new CallbackListener(listener));
+
+
+    }
+
+
+    /**
+     * DELETE data on the path relative to the baseURL - Synchronous
      *
      * @param path if empty/null, data will be deleted under the root of the baseURL
      *             Be careful with this as this can clear all the data under your root
@@ -440,16 +534,15 @@ public class RetrofireSvc implements RetrofireSvcApi {
 
     }
 
-
     /**
      *
-     * DELETE data on the path relative to the baseURL
+     * DELETE data on the path relative to the baseURL - Asynchronous
      *
      * @param path if empty/null, data will be deleted under the root of the baseURL
      *             Be careful with this as this can clear all the data under your root
      * @param listener NetworkRequestListener: Overwrite the onExecuted and onFailure
      *                 methods to have access to the asynchronous response.
-     *                 See Examples.java for more details
+     *                 See Examples.java or Readme for more details
      *
      */
 
@@ -468,7 +561,7 @@ public class RetrofireSvc implements RetrofireSvcApi {
 
 
     /**
-     * GET data from the path relative to the baseURL
+     * GET data from the path relative to the baseURL -Synchronous
      *
      * @param path if empty/null, all data under your root will be fetched
      * @return {@link FirebaseResponse}
