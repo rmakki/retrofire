@@ -202,6 +202,90 @@ public class RetrofireSvc implements RetrofireSvcApi {
     }
 
     /**
+     * PATCH data on the path relative to the baseURL - Asynchronous
+     *
+     * Firebase will only update the fields passed.
+     * If the fields passed do not exist, they will be added to firebase
+     *
+     * @param path if empty/null, data will be updated under the root of the baseURL
+     *             if not null, data will be updated relative to the baseURL
+     * @param data -if null Retrofit will throw a "Body parameter value must not be null"
+     *             error
+     *             if you pass an empty object Firebase will return a success
+     *             but the call will not change the state of your firebase instance
+     * @param listener NetworkRequestListener: Overwrite the onExecuted and onFailure
+     *                 methods to have access to the asynchronous response.
+     *                 See Examples.java or Readme for more details
+     */
+
+    public void patchAsync(String path, Object data, NetworkRequestListener listener) throws Exception {
+
+        if (path == null) {
+            path = "";
+        }
+
+        Call<ResponseBody> call = this.firebaseSvcApi.patch(path, data, this.queryParam);
+
+        call.enqueue(new CallbackListener(listener));
+    }
+
+    /**
+     * PATCH data on the path relative to the baseURL - Update - Asynchronous
+     *
+     * Named children in the data being written with PATCH are overwritten,
+     * but omitted children are not deleted.
+     * If the fields passed do not exist, they will be added to firebase
+     *
+     * @param path if empty/null, data will be updated under the root of the baseURL
+     *             if not null, data will be updated relative to the baseURL
+     * @param data -if null Retrofit will throw a "Body parameter value must not be null"
+     *             error
+     *             if you pass an empty object Firebase will return a success
+     *             but the call will not change the state of your firebase instance
+     * @param listener NetworkRequestListener: Overwrite the onExecuted and onFailure
+     *                 methods to have access to the asynchronous response.
+     *                 See Examples.java or Readme for more details
+     */
+
+    public void patchAsync(String path, Map<String, Object> data, NetworkRequestListener listener) throws Exception {
+
+        this.patchAsync(path, (Object) data, listener);
+
+    }
+
+
+    /**
+     * PATCH RAW json data relative to the baseURL - Asynchronous
+     * <p>
+     * Firebase will only update the fields passed.
+     * If the fields passed do not exist, they will be added to firebase
+     *
+     * @param path    if empty/null, data will be updated under the root of the baseURL
+     *                if not null, data will be updated relative to the baseURL
+     * @param rawdata if null Retrofit will throw a IllegalArgumentException: Body parameter value must not be null
+     *                exception.
+     *                if you pass an empty String okhttp3 will throw a java.lang.NullPointerException
+     *                with Info "No data supplied."
+     * @param listener NetworkRequestListener: Overwrite the onExecuted and onFailure
+     *                 methods to have access to the asynchronous response.
+     *                 See Examples.java or Readme for more details
+     */
+
+    public void patchAsync(String path, String rawdata, NetworkRequestListener listener) throws Exception {
+
+        if (path == null) {
+            path = "";
+        }
+
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), rawdata);
+
+        Call<ResponseBody> call = this.firebaseSvcApiNoConverter.patch(path, body, this.queryParam);
+
+        call.enqueue(new CallbackListener(listener));
+    }
+
+
+    /**
      * POST data relative to the baseURL - Synchronous
      * <p>
      * Firebase will insert data under the baseURL but associated with a new Firebase
