@@ -139,7 +139,76 @@ public interface RetrofireSvcApi {
 
     public FirebaseResponse post(String path, String rawdata) throws Exception;
 
+    /**
+     * POST data relative to the baseURL - Asynchronous
+     * <p>
+     * Firebase will insert data under the baseURL but associated with a new Firebase
+     * generated key
+     *
+     * @param path if empty/null, data will be posted under the root
+     *             if not null, data will be inserted relative to the baseURL
+     * @param data -if null Retrofit will throw a "Body parameter value must not be null"
+     *             error
+     *             if you pass an empty object beware:
+     *             Firebase will not create an empty node with a generated key
+     *             if that is your expectation. Firebase will return a success
+     *             but the call will not change the state of your firebase instance
+     *             (as if you did not make a call, no data posted)
+     * @param listener NetworkRequestListener: Overwrite the onExecuted and onFailure
+     *                 methods to have access to the asynchronous response.
+     *                 See Examples.java or Readme for more details
+     *
+     */
 
+    public void postAsync(String path, Object data, NetworkRequestListener listener) throws Exception;
+
+    /**
+     * POST data relative to the baseURL - Asynchronous
+     * <p>
+     * Firebase will insert data under the baseURL but associated with a new Firebase
+     * generated key
+     *
+     * @param path if empty/null, data will be posted under the root
+     *             if not null, data will be inserted relative to the baseURL
+     * @param data if null Retrofit will throw a IllegalArgumentException: Body parameter value must not be null
+     *             exception.
+     *             if you pass an empty object beware:
+     *             Firebase will not create an empty node with a generated key
+     *             if that is your expectation. Firebase will return a success
+     *             but the call will not change the state of your firebase instance
+     *             (as if you did not make a call, no data posted)
+     * @param listener NetworkRequestListener: Overwrite the onExecuted and onFailure
+     *                 methods to have access to the asynchronous response.
+     *                 See Examples.java or Readme for more details
+     * <p>
+     * <p>
+     * Note: Each element in the Map will be inserted under a new firebase generated key. The map
+     * key will translate to a parent node and the fields in the object will translate to individual elements
+     * under the parent node
+     */
+
+    public void postAsync(String path, Map<String, Object> data, NetworkRequestListener listener) throws Exception;
+
+    /**
+     * POST RAW json data relative to the baseURL - Asynchronous
+     * <p>
+     * Firebase will insert data under the baseURL but associated with a new Firebase
+     * generated key
+     *
+     * @param path    if empty/null, data will be posted under the root
+     *                if not null, data will be inserted relative to the baseURL
+     * @param rawdata if null Retrofit will throw a IllegalArgumentException: Body parameter value must not be null
+     *                exception.
+     *                if you pass an empty String okhttp3 will throw a java.lang.NullPointerException
+     *                with Info "No data supplied."
+     * @param listener NetworkRequestListener: Overwrite the onExecuted and onFailure
+     *                 methods to have access to the asynchronous response.
+     *                 See Examples.java or Readme for more details
+     */
+
+    public void postAsync(String path, String rawdata, NetworkRequestListener listener) throws Exception;
+
+    
     /**
      * PUT data on the path relative to the baseURL : create or delete - Synchronous
      * <p>

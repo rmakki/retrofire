@@ -107,7 +107,7 @@ public class RetrofireSvc implements RetrofireSvcApi {
     }
 
     /**
-     * PATCH data on the path relative to the baseURL
+     * PATCH data on the path relative to the baseURL - Synchronous
      *
      * Firebase will only update the fields passed.
      * If the fields passed do not exist, they will be added to firebase
@@ -142,7 +142,7 @@ public class RetrofireSvc implements RetrofireSvcApi {
     }
 
     /**
-     * PATCH data on the path relative to the baseURL - Update
+     * PATCH data on the path relative to the baseURL - Update - Synchronous
      *
      * Named children in the data being written with PATCH are overwritten,
      * but omitted children are not deleted.
@@ -165,7 +165,7 @@ public class RetrofireSvc implements RetrofireSvcApi {
 
 
     /**
-     * PATCH RAW json data relative to the baseURL
+     * PATCH RAW json data relative to the baseURL - Synchronous
      * <p>
      * Firebase will only update the fields passed.
      * If the fields passed do not exist, they will be added to firebase
@@ -202,7 +202,7 @@ public class RetrofireSvc implements RetrofireSvcApi {
     }
 
     /**
-     * POST data relative to the baseURL
+     * POST data relative to the baseURL - Synchronous
      * <p>
      * Firebase will insert data under the baseURL but associated with a new Firebase
      * generated key
@@ -243,7 +243,7 @@ public class RetrofireSvc implements RetrofireSvcApi {
 
 
     /**
-     * POST data relative to the baseURL
+     * POST data relative to the baseURL - Synchronous
      * <p>
      * Firebase will insert data under the baseURL but associated with a new Firebase
      * generated key
@@ -273,7 +273,7 @@ public class RetrofireSvc implements RetrofireSvcApi {
 
 
     /**
-     * POST RAW json data relative to the baseURL
+     * POST RAW json data relative to the baseURL - Synchronous
      * <p>
      * Firebase will insert data under the baseURL but associated with a new Firebase
      * generated key
@@ -309,6 +309,105 @@ public class RetrofireSvc implements RetrofireSvcApi {
 
     }
 
+
+    /**
+     * POST data relative to the baseURL - Asynchronous
+     * <p>
+     * Firebase will insert data under the baseURL but associated with a new Firebase
+     * generated key
+     *
+     * @param path if empty/null, data will be posted under the root
+     *             if not null, data will be inserted relative to the baseURL
+     * @param data -if null Retrofit will throw a "Body parameter value must not be null"
+     *             error
+     *             if you pass an empty object beware:
+     *             Firebase will not create an empty node with a generated key
+     *             if that is your expectation. Firebase will return a success
+     *             but the call will not change the state of your firebase instance
+     *             (as if you did not make a call, no data posted)
+     * @param listener NetworkRequestListener: Overwrite the onExecuted and onFailure
+     *                 methods to have access to the asynchronous response.
+     *                 See Examples.java or Readme for more details
+     *
+     */
+
+    public void postAsync(String path, Object data, NetworkRequestListener listener) throws Exception {
+
+        if (path == null) {
+            path = "";
+        }
+
+        Call<ResponseBody> call = this.firebaseSvcApi.post(path, data, this.queryParam);
+
+        call.enqueue(new CallbackListener(listener));
+
+    }
+
+
+    /**
+     * POST data relative to the baseURL - Asynchronous
+     * <p>
+     * Firebase will insert data under the baseURL but associated with a new Firebase
+     * generated key
+     *
+     * @param path if empty/null, data will be posted under the root
+     *             if not null, data will be inserted relative to the baseURL
+     * @param data if null Retrofit will throw a IllegalArgumentException: Body parameter value must not be null
+     *             exception.
+     *             if you pass an empty object beware:
+     *             Firebase will not create an empty node with a generated key
+     *             if that is your expectation. Firebase will return a success
+     *             but the call will not change the state of your firebase instance
+     *             (as if you did not make a call, no data posted)
+     * @param listener NetworkRequestListener: Overwrite the onExecuted and onFailure
+     *                 methods to have access to the asynchronous response.
+     *                 See Examples.java or Readme for more details
+     * <p>
+     * <p>
+     * Note: Each element in the Map will be inserted under a new firebase generated key. The map
+     * key will translate to a parent node and the fields in the object will translate to individual elements
+     * under the parent node
+     */
+
+    public void postAsync(String path, Map<String, Object> data, NetworkRequestListener listener) throws Exception {
+
+         this.postAsync(path, (Object) data, listener);
+
+    }
+
+
+    /**
+     * POST RAW json data relative to the baseURL - Asynchronous
+     * <p>
+     * Firebase will insert data under the baseURL but associated with a new Firebase
+     * generated key
+     *
+     * @param path    if empty/null, data will be posted under the root
+     *                if not null, data will be inserted relative to the baseURL
+     * @param rawdata if null Retrofit will throw a IllegalArgumentException: Body parameter value must not be null
+     *                exception.
+     *                if you pass an empty String okhttp3 will throw a java.lang.NullPointerException
+     *                with Info "No data supplied."
+     * @param listener NetworkRequestListener: Overwrite the onExecuted and onFailure
+     *                 methods to have access to the asynchronous response.
+     *                 See Examples.java or Readme for more details
+     */
+
+    public void postAsync(String path, String rawdata, NetworkRequestListener listener) throws Exception {
+
+        if (path == null) {
+            path = "";
+        }
+
+        FirebaseResponse firebaseResponse;
+
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), rawdata);
+
+        Call<ResponseBody> call = this.firebaseSvcApiNoConverter.post(path, body, this.queryParam);
+
+        call.enqueue(new CallbackListener(listener));
+
+    }
 
     /**
      * PUT data on the path relative to the baseURL : create or delete - Synchronous
