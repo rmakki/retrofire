@@ -73,7 +73,7 @@ public interface RetrofireSvcApi {
      */
 
     public FirebaseResponse patch(String path, String rawdata) throws Exception;
-    
+
 
     /**
      * PATCH data on the path relative to the baseURL - Asynchronous

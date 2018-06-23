@@ -43,7 +43,7 @@ public class RetrofireSvc implements RetrofireSvcApi {
         this.okHttpBuilder = new OkHttpClient.Builder();
 
         this.queryParam = new HashMap();
-        this.headerParam = new HashMap<>();
+        this.headerParam = new HashMap();
 
         if (httpFullLogging) {
             this.addHttpFullLogging();
@@ -963,7 +963,7 @@ public class RetrofireSvc implements RetrofireSvcApi {
      *
     **/
 
-    private OkHttpClient.Builder addQuery(OkHttpClient.Builder httpClient, String param, String value) {
+    private OkHttpClient.Builder addQuery(OkHttpClient.Builder httpClient, final String param, final String value) {
 
         httpClient.addInterceptor(new
 
